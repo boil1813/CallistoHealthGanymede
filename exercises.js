@@ -136,10 +136,8 @@ window.addExerciseToDict = function(type) {
     if (name) {
         const newId = type.charAt(0) + Date.now().toString(36); // Generate pseudo-unique ID
         
-        // Auto-generate a related Unsplash image URL based on the exercise name
-        // We use keywords like 'workout', 'fitness' to ensure relevant results
-        const encodedName = encodeURIComponent(name + ' workout fitness');
-        const autoImage = `https://source.unsplash.com/200x200/?${encodedName}`;
+        // Use a reliable placeholder image service, appending a random number to avoid aggressive caching
+        const autoImage = `https://loremflickr.com/200/200/fitness,gym?random=${Math.floor(Math.random() * 1000)}`;
         
         if (!MOCK_DATA.exerciseDictionary) MOCK_DATA.exerciseDictionary = {};
         if (!MOCK_DATA.exerciseDictionary[type]) MOCK_DATA.exerciseDictionary[type] = [];
