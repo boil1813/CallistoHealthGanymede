@@ -97,6 +97,7 @@ function loadFirebaseData() {
                     (dayData.breakfast && dayData.breakfast.length > 0) || 
                     (dayData.lunch && dayData.lunch.length > 0) || 
                     (dayData.dinner && dayData.dinner.length > 0) || 
+                    (dayData.postWorkout && dayData.postWorkout.length > 0) || 
                     (dayData.exercise && dayData.exercise.length > 0)) {
                     
                     calendar.addEvent({
@@ -132,6 +133,7 @@ function displayDateDetails(dateStr) {
         (!dayData.breakfast || dayData.breakfast.length === 0) && 
         (!dayData.lunch || dayData.lunch.length === 0) && 
         (!dayData.dinner || dayData.dinner.length === 0) && 
+        (!dayData.postWorkout || dayData.postWorkout.length === 0) && 
         (!dayData.exercise || dayData.exercise.length === 0))) {
         
         // No data for this day
@@ -155,7 +157,8 @@ function displayDateDetails(dateStr) {
     const allDiet = [
         ...(dayData.breakfast || []).map(item => ({...item, meal: '아침'})),
         ...(dayData.lunch || []).map(item => ({...item, meal: '점심'})),
-        ...(dayData.dinner || []).map(item => ({...item, meal: '저녁'}))
+        ...(dayData.dinner || []).map(item => ({...item, meal: '저녁'})),
+        ...(dayData.postWorkout || []).map(item => ({...item, meal: '운동후'}))
     ];
 
     if (allDiet.length > 0) {

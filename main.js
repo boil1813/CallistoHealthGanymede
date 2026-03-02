@@ -24,6 +24,7 @@ let MOCK_DATA = {
     breakfast: [],
     lunch: [],
     dinner: [],
+    postWorkout: [], // Added post-workout
     exercise: []
 };
 
@@ -40,7 +41,7 @@ window.saveData = async function() {
 // Function to render all UI components based on current MOCK_DATA
 window.renderAll = function() {
     window.updateSummary();
-    ['breakfast', 'lunch', 'dinner', 'exercise'].forEach(listType => {
+    ['breakfast', 'lunch', 'dinner', 'postWorkout', 'exercise'].forEach(listType => {
         const el = document.getElementById(`${listType}-tasks`);
         if (el && typeof el.render === 'function') el.render();
     });
@@ -63,7 +64,7 @@ onSnapshot(userDocRef, (docSnap) => {
             // New day detected: Keep target weight, clear current weight, uncheck all tasks
             MOCK_DATA = data;
             MOCK_DATA.weight = null;
-            ['breakfast', 'lunch', 'dinner', 'exercise'].forEach(listType => {
+            ['breakfast', 'lunch', 'dinner', 'postWorkout', 'exercise'].forEach(listType => {
                 if (MOCK_DATA[listType]) {
                     MOCK_DATA[listType].forEach(task => task.completed = false);
                 }
@@ -135,7 +136,7 @@ class SummaryWidget extends HTMLElement {
 
     render() {
         // Calculate Diet Progress
-        const dietTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || [])];
+        const dietTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.postWorkout || [])];
         const totalDiet = dietTasks.length;
         const completedDiet = dietTasks.filter(t => t.completed).length;
         const dietPercent = totalDiet === 0 ? 0 : Math.round((completedDiet / totalDiet) * 100);
@@ -640,7 +641,7 @@ window.addNewTask = function(mealType) {
     const title = titleInput.value.trim();
 
     if (title) {
-        const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.exercise || [])];
+        const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.postWorkout || []), ...(MOCK_DATA.exercise || [])];
         const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
         
         if (!MOCK_DATA[mealType]) MOCK_DATA[mealType] = [];
@@ -675,7 +676,7 @@ window.addExerciseTask = function() {
         
         const detail = detailStr.join(' x ');
 
-        const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.exercise || [])];
+        const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.postWorkout || []), ...(MOCK_DATA.exercise || [])];
         const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
         
         if (!MOCK_DATA.exercise) MOCK_DATA.exercise = [];
