@@ -22,20 +22,20 @@ let MOCK_DATA = {};
 // Default dictionary if none exists
 const defaultDictionary = {
     upper: [
-        { id: 'u1', name: '벤치프레스', target: '가슴' },
-        { id: 'u2', name: '바벨 로우', target: '등' },
-        { id: 'u3', name: '풀업 (턱걸이)', target: '등' },
-        { id: 'u4', name: '덤벨 숄더 프레스', target: '어깨' },
-        { id: 'u5', name: '사이드 레터럴 레이즈', target: '어깨' },
-        { id: 'u6', name: '푸시업 (팔굽혀펴기)', target: '가슴/팔' }
+        { id: 'u1', name: '벤치프레스', target: '가슴', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=200&h=200&fit=crop' },
+        { id: 'u2', name: '바벨 로우', target: '등', image: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=200&h=200&fit=crop' },
+        { id: 'u3', name: '풀업 (턱걸이)', target: '등', image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=200&h=200&fit=crop' },
+        { id: 'u4', name: '덤벨 숄더 프레스', target: '어깨', image: 'https://images.unsplash.com/photo-1541534741688-6078c65b5a33?w=200&h=200&fit=crop' },
+        { id: 'u5', name: '사이드 레터럴 레이즈', target: '어깨', image: 'https://images.unsplash.com/photo-1532029837206-abbe2b7620e3?w=200&h=200&fit=crop' },
+        { id: 'u6', name: '푸시업 (팔굽혀펴기)', target: '가슴/팔', image: 'https://images.unsplash.com/photo-1566241142559-40e1bfc26ebc?w=200&h=200&fit=crop' }
     ],
     lower: [
-        { id: 'l1', name: '스쿼트', target: '전체' },
-        { id: 'l2', name: '레그 프레스', target: '허벅지 앞' },
-        { id: 'l3', name: '런지', target: '엉덩이/허벅지' },
-        { id: 'l4', name: '데드리프트', target: '하체 뒷면' },
-        { id: 'l5', name: '레그 익스텐션', target: '허벅지 앞' },
-        { id: 'l6', name: '카프 레이즈', target: '종아리' }
+        { id: 'l1', name: '스쿼트', target: '전체', image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=200&h=200&fit=crop' },
+        { id: 'l2', name: '레그 프레스', target: '허벅지 앞', image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=200&h=200&fit=crop' },
+        { id: 'l3', name: '런지', target: '엉덩이/허벅지', image: 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=200&h=200&fit=crop' },
+        { id: 'l4', name: '데드리프트', target: '하체 뒷면', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200&h=200&fit=crop' },
+        { id: 'l5', name: '레그 익스텐션', target: '허벅지 앞', image: 'https://images.unsplash.com/photo-1591948971351-70ba99110252?w=200&h=200&fit=crop' },
+        { id: 'l6', name: '카프 레이즈', target: '종아리', image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2ec617?w=200&h=200&fit=crop' }
     ]
 };
 
@@ -58,8 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Enter keys
     document.getElementById('new-upper-name').addEventListener('keypress', (e) => { if (e.key === 'Enter') addExerciseToDict('upper'); });
     document.getElementById('new-upper-target').addEventListener('keypress', (e) => { if (e.key === 'Enter') addExerciseToDict('upper'); });
+    document.getElementById('new-upper-image').addEventListener('keypress', (e) => { if (e.key === 'Enter') addExerciseToDict('upper'); });
     document.getElementById('new-lower-name').addEventListener('keypress', (e) => { if (e.key === 'Enter') addExerciseToDict('lower'); });
     document.getElementById('new-lower-target').addEventListener('keypress', (e) => { if (e.key === 'Enter') addExerciseToDict('lower'); });
+    document.getElementById('new-lower-image').addEventListener('keypress', (e) => { if (e.key === 'Enter') addExerciseToDict('lower'); });
 });
 
 onSnapshot(userDocRef, (docSnap) => {
@@ -106,16 +108,17 @@ function renderList(type) {
     }
 
     listEl.innerHTML = items.map(item => `
-        <li>
-            <div>
+        <li style="display: flex; align-items: center; gap: 16px; padding: 16px;">
+            <div style="width: 60px; height: 60px; border-radius: 8px; overflow: hidden; background-color: var(--color-bg-main); flex-shrink: 0;">
+                ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: crop;">` : `<span class="material-icons-round" style="font-size: 2rem; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; height: 100%;">fitness_center</span>`}
+            </div>
+            <div style="flex: 1;">
                 <div class="ex-name">${item.name}</div>
+                <div style="margin-top: 4px;"><span class="muscle-badge">${item.target}</span></div>
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-                <span class="muscle-badge">${item.target}</span>
-                <button onclick="deleteExerciseFromDict('${type}', '${item.id}')" class="icon-button" style="width:28px; height:28px; color:var(--color-text-muted);" title="삭제">
-                    <span class="material-icons-round" style="font-size:1.1rem;">delete_outline</span>
-                </button>
-            </div>
+            <button onclick="deleteExerciseFromDict('${type}', '${item.id}')" class="icon-button" style="width:28px; height:28px; color:var(--color-text-muted);" title="삭제">
+                <span class="material-icons-round" style="font-size:1.1rem;">delete_outline</span>
+            </button>
         </li>
     `).join('');
 }
@@ -126,9 +129,11 @@ function renderList(type) {
 window.addExerciseToDict = function(type) {
     const nameInput = document.getElementById(`new-${type}-name`);
     const targetInput = document.getElementById(`new-${type}-target`);
+    const imageInput = document.getElementById(`new-${type}-image`);
     
     const name = nameInput.value.trim();
     const target = targetInput.value.trim() || '미지정';
+    const image = imageInput.value.trim();
 
     if (name) {
         const newId = type.charAt(0) + Date.now().toString(36); // Generate pseudo-unique ID
@@ -139,13 +144,15 @@ window.addExerciseToDict = function(type) {
         MOCK_DATA.exerciseDictionary[type].push({
             id: newId,
             name: name,
-            target: target
+            target: target,
+            image: image
         });
         
         saveData(); // onSnapshot will trigger re-render
         
         nameInput.value = '';
         targetInput.value = '';
+        imageInput.value = '';
         nameInput.focus();
     }
 };

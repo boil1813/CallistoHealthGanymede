@@ -28,20 +28,20 @@ let MOCK_DATA = {
     exercise: [],
     exerciseDictionary: {
         upper: [
-            { id: 'u1', name: '벤치프레스', target: '가슴' },
-            { id: 'u2', name: '바벨 로우', target: '등' },
-            { id: 'u3', name: '풀업 (턱걸이)', target: '등' },
-            { id: 'u4', name: '덤벨 숄더 프레스', target: '어깨' },
-            { id: 'u5', name: '사이드 레터럴 레이즈', target: '어깨' },
-            { id: 'u6', name: '푸시업 (팔굽혀펴기)', target: '가슴/팔' }
+            { id: 'u1', name: '벤치프레스', target: '가슴', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=200&h=200&fit=crop' },
+            { id: 'u2', name: '바벨 로우', target: '등', image: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=200&h=200&fit=crop' },
+            { id: 'u3', name: '풀업 (턱걸이)', target: '등', image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=200&h=200&fit=crop' },
+            { id: 'u4', name: '덤벨 숄더 프레스', target: '어깨', image: 'https://images.unsplash.com/photo-1541534741688-6078c65b5a33?w=200&h=200&fit=crop' },
+            { id: 'u5', name: '사이드 레터럴 레이즈', target: '어깨', image: 'https://images.unsplash.com/photo-1532029837206-abbe2b7620e3?w=200&h=200&fit=crop' },
+            { id: 'u6', name: '푸시업 (팔굽혀펴기)', target: '가슴/팔', image: 'https://images.unsplash.com/photo-1566241142559-40e1bfc26ebc?w=200&h=200&fit=crop' }
         ],
         lower: [
-            { id: 'l1', name: '스쿼트', target: '전체' },
-            { id: 'l2', name: '레그 프레스', target: '허벅지 앞' },
-            { id: 'l3', name: '런지', target: '엉덩이/허벅지' },
-            { id: 'l4', name: '데드리프트', target: '하체 뒷면' },
-            { id: 'l5', name: '레그 익스텐션', target: '허벅지 앞' },
-            { id: 'l6', name: '카프 레이즈', target: '종아리' }
+            { id: 'l1', name: '스쿼트', target: '전체', image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=200&h=200&fit=crop' },
+            { id: 'l2', name: '레그 프레스', target: '허벅지 앞', image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=200&h=200&fit=crop' },
+            { id: 'l3', name: '런지', target: '엉덩이/허벅지', image: 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=200&h=200&fit=crop' },
+            { id: 'l4', name: '데드리프트', target: '하체 뒷면', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200&h=200&fit=crop' },
+            { id: 'l5', name: '레그 익스텐션', target: '허벅지 앞', image: 'https://images.unsplash.com/photo-1591948971351-70ba99110252?w=200&h=200&fit=crop' },
+            { id: 'l6', name: '카프 레이즈', target: '종아리', image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2ec617?w=200&h=200&fit=crop' }
         ]
     }
 };
@@ -612,6 +612,14 @@ class TaskList extends HTMLElement {
                     text-decoration: line-through;
                     color: var(--color-text-muted);
                 }
+                .task-image {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 6px;
+                    margin-right: 12px;
+                    object-fit: cover;
+                    background-color: var(--color-bg-main);
+                }
                 .task-detail {
                     font-size: 0.8rem;
                     color: var(--color-text-muted);
@@ -659,6 +667,7 @@ class TaskList extends HTMLElement {
                 ${tasks.map(task => `
                     <li class="task-item ${task.completed ? 'completed' : ''}">
                         <div class="task-checkbox" onclick="window.toggleTask('${listType}', ${task.id})"></div>
+                        ${task.image ? `<img src="${task.image}" class="task-image" alt="${task.title}">` : ''}
                         <div class="task-content">
                             <div class="task-title">${task.title}</div>
                             ${task.detail ? `<div class="task-detail">${task.detail}</div>` : ''}
@@ -749,6 +758,14 @@ window.addExerciseTask = function() {
     }
 
     if (title) {
+        let image = '';
+        if (!isCardio) {
+            const rawTitle = document.getElementById('new-strength-title').value;
+            const subtype = typeSelector.value.split('-')[1]; // upper or lower
+            const dictEntry = MOCK_DATA.exerciseDictionary[subtype].find(ex => ex.name === rawTitle);
+            if (dictEntry && dictEntry.image) image = dictEntry.image;
+        }
+
         const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.postWorkout || []), ...(MOCK_DATA.exercise || [])];
         const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
         
@@ -757,6 +774,7 @@ window.addExerciseTask = function() {
             id: newId,
             title: title,
             detail: detail,
+            image: image, // Save image URL
             completed: false
         });
         

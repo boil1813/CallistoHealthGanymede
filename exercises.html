@@ -129,10 +129,15 @@
                             <span class="status-badge" style="background-color: rgba(78, 205, 196, 0.15); color: var(--color-secondary);">가슴/등/어깨</span>
                         </div>
                         
-                        <div class="add-task-form">
-                            <input type="text" id="new-upper-name" class="task-input" placeholder="새 상체 운동 이름">
-                            <input type="text" id="new-upper-target" class="task-input small" placeholder="타겟 부위 (예: 가슴)">
-                            <button id="add-upper-btn" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                        <div class="add-task-form" style="flex-direction: column; gap: 8px;">
+                            <div style="display: flex; gap: 8px; width: 100%;">
+                                <input type="text" id="new-upper-name" class="task-input" placeholder="새 상체 운동 이름" style="flex: 2;">
+                                <input type="text" id="new-upper-target" class="task-input small" placeholder="타겟 부위" style="flex: 1;">
+                            </div>
+                            <div style="display: flex; gap: 8px; width: 100%;">
+                                <input type="text" id="new-upper-image" class="task-input" placeholder="이미지 URL (선택 사항)" style="flex: 1;">
+                                <button id="add-upper-btn" class="icon-button add-btn" style="width: 40px; height: 40px;"><span class="material-icons-round">add</span></button>
+                            </div>
                         </div>
 
                         <ul class="exercise-list" id="upper-exercise-list">
@@ -149,10 +154,15 @@
                             <span class="status-badge" style="background-color: rgba(255, 107, 107, 0.15); color: var(--color-primary);">대퇴사두/햄스트링</span>
                         </div>
 
-                        <div class="add-task-form">
-                            <input type="text" id="new-lower-name" class="task-input" placeholder="새 하체 운동 이름">
-                            <input type="text" id="new-lower-target" class="task-input small" placeholder="타겟 부위 (예: 종아리)">
-                            <button id="add-lower-btn" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                        <div class="add-task-form" style="flex-direction: column; gap: 8px;">
+                            <div style="display: flex; gap: 8px; width: 100%;">
+                                <input type="text" id="new-lower-name" class="task-input" placeholder="새 하체 운동 이름" style="flex: 2;">
+                                <input type="text" id="new-lower-target" class="task-input small" placeholder="타겟 부위" style="flex: 1;">
+                            </div>
+                            <div style="display: flex; gap: 8px; width: 100%;">
+                                <input type="text" id="new-lower-image" class="task-input" placeholder="이미지 URL (선택 사항)" style="flex: 1;">
+                                <button id="add-lower-btn" class="icon-button add-btn" style="width: 40px; height: 40px;"><span class="material-icons-round">add</span></button>
+                            </div>
                         </div>
                         
                         <ul class="exercise-list" id="lower-exercise-list">
