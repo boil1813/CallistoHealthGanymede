@@ -143,12 +143,33 @@
                         </div>
                         
                         <div class="add-exercise-form">
-                            <input type="text" id="new-exercise-title" class="task-input" placeholder="운동명 (예: 벤치프레스)">
-                            <div class="exercise-details-inputs">
-                                <input type="number" id="new-exercise-weight" class="task-input small" placeholder="무게(kg)">
-                                <input type="number" id="new-exercise-reps" class="task-input small" placeholder="횟수">
-                                <input type="number" id="new-exercise-sets" class="task-input small" placeholder="세트">
-                                <button onclick="window.addExerciseTask()" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                            <!-- Type Selector -->
+                            <div class="exercise-type-selector">
+                                <label class="type-radio"><input type="radio" name="exercise-type" value="strength-upper" checked> 상체</label>
+                                <label class="type-radio"><input type="radio" name="exercise-type" value="strength-lower"> 하체</label>
+                                <label class="type-radio"><input type="radio" name="exercise-type" value="cardio"> 유산소</label>
+                            </div>
+                            
+                            <!-- Strength Inputs (Upper/Lower) -->
+                            <div id="strength-inputs" class="exercise-input-group">
+                                <input type="text" id="new-strength-title" class="task-input" placeholder="운동명 (예: 벤치프레스)">
+                                <div class="exercise-details-inputs">
+                                    <input type="number" id="new-strength-weight" class="task-input small" placeholder="무게(kg)">
+                                    <input type="number" id="new-strength-reps" class="task-input small" placeholder="횟수">
+                                    <input type="number" id="new-strength-sets" class="task-input small" placeholder="세트">
+                                    <button onclick="window.addExerciseTask()" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                </div>
+                            </div>
+
+                            <!-- Cardio Inputs -->
+                            <div id="cardio-inputs" class="exercise-input-group" style="display: none;">
+                                <input type="text" id="new-cardio-title" class="task-input" placeholder="운동명 (예: 트레드밀)">
+                                <div class="exercise-details-inputs">
+                                    <input type="number" step="0.1" id="new-cardio-speed" class="task-input small" placeholder="속도">
+                                    <input type="number" step="0.1" id="new-cardio-incline" class="task-input small" placeholder="경사도">
+                                    <input type="number" id="new-cardio-time" class="task-input small" placeholder="시간(분)">
+                                    <button onclick="window.addExerciseTask()" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                </div>
                             </div>
                         </div>
 

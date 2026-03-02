@@ -658,24 +658,55 @@ window.addNewTask = function(mealType) {
 };
 
 window.addExerciseTask = function() {
-    const titleInput = document.getElementById('new-exercise-title');
-    const weightInput = document.getElementById('new-exercise-weight');
-    const repsInput = document.getElementById('new-exercise-reps');
-    const setsInput = document.getElementById('new-exercise-sets');
+    const typeSelector = document.querySelector('input[name="exercise-type"]:checked');
+    const isCardio = typeSelector && typeSelector.value === 'cardio';
 
-    const title = titleInput.value.trim();
-    const weight = weightInput.value.trim();
-    const reps = repsInput.value.trim();
-    const sets = setsInput.value.trim();
+    let title, detail;
+
+    if (isCardio) {
+        const titleInput = document.getElementById('new-cardio-title');
+        const speedInput = document.getElementById('new-cardio-speed');
+        const inclineInput = document.getElementById('new-cardio-incline');
+        const timeInput = document.getElementById('new-cardio-time');
+
+        title = titleInput.value.trim();
+        
+        let detailStr = [];
+        if (speedInput.value.trim()) detailStr.push(`속도 ${speedInput.value.trim()}`);
+        if (inclineInput.value.trim()) detailStr.push(`경사도 ${inclineInput.value.trim()}`);
+        if (timeInput.value.trim()) detailStr.push(`${timeInput.value.trim()}분`);
+        detail = detailStr.join(' / ');
+
+        titleInput.value = '';
+        speedInput.value = '';
+        inclineInput.value = '';
+        timeInput.value = '';
+        titleInput.focus();
+    } else {
+        // Strength (Upper/Lower)
+        const typePrefix = typeSelector ? (typeSelector.value === 'strength-upper' ? '[상체] ' : '[하체] ') : '';
+        const titleInput = document.getElementById('new-strength-title');
+        const weightInput = document.getElementById('new-strength-weight');
+        const repsInput = document.getElementById('new-strength-reps');
+        const setsInput = document.getElementById('new-strength-sets');
+
+        const rawTitle = titleInput.value.trim();
+        title = rawTitle ? typePrefix + rawTitle : '';
+
+        let detailStr = [];
+        if (weightInput.value.trim()) detailStr.push(`${weightInput.value.trim()}kg`);
+        if (repsInput.value.trim()) detailStr.push(`${repsInput.value.trim()}회`);
+        if (setsInput.value.trim()) detailStr.push(`${setsInput.value.trim()}세트`);
+        detail = detailStr.join(' x ');
+
+        titleInput.value = '';
+        weightInput.value = '';
+        repsInput.value = '';
+        setsInput.value = '';
+        titleInput.focus();
+    }
 
     if (title) {
-        let detailStr = [];
-        if (weight) detailStr.push(`${weight}kg`);
-        if (reps) detailStr.push(`${reps}회`);
-        if (sets) detailStr.push(`${sets}세트`);
-        
-        const detail = detailStr.join(' x ');
-
         const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.postWorkout || []), ...(MOCK_DATA.exercise || [])];
         const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
         
@@ -689,12 +720,6 @@ window.addExerciseTask = function() {
         
         window.renderAll();
         window.saveData();
-
-        titleInput.value = '';
-        weightInput.value = '';
-        repsInput.value = '';
-        setsInput.value = '';
-        titleInput.focus();
     }
 };
 
@@ -710,12 +735,29 @@ document.addEventListener('DOMContentLoaded', () => {
         dateElement.textContent = now.toLocaleDateString('ko-KR', options);
     }
 
+    // Handle exercise type toggle
+    const radioButtons = document.querySelectorAll('input[name="exercise-type"]');
+    const strengthInputs = document.getElementById('strength-inputs');
+    const cardioInputs = document.getElementById('cardio-inputs');
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            if (e.target.value === 'cardio') {
+                strengthInputs.style.display = 'none';
+                cardioInputs.style.display = 'flex';
+            } else {
+                strengthInputs.style.display = 'flex';
+                cardioInputs.style.display = 'none';
+            }
+        });
+    });
+
     // Set up Enter key listeners for all inputs
     const inputs = document.querySelectorAll('.task-input');
     inputs.forEach(input => {
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                if (input.id.startsWith('new-exercise')) {
+                if (input.id.startsWith('new-strength') || input.id.startsWith('new-cardio')) {
                     window.addExerciseTask();
                 } else {
                     const mealType = input.id.replace('new-', '').replace('-title', '');
