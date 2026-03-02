@@ -88,20 +88,21 @@ class SummaryWidget extends HTMLElement {
                     display: block;
                     background-color: var(--color-bg-card, #fff);
                     border-radius: var(--radius-md, 16px);
-                    padding: var(--space-lg, 24px);
+                    padding: var(--space-xl, 32px); /* Increased padding */
                     box-shadow: var(--shadow-soft);
                 }
                 .summary-container {
                     display: grid;
                     grid-template-columns: 1fr 1fr 1fr;
-                    gap: var(--space-lg);
+                    gap: 40px; /* Increased gap between columns */
                 }
                 .summary-item {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    padding-right: var(--space-lg);
+                    padding-right: 20px;
                     border-right: 1px dashed rgba(0,0,0,0.1);
+                    min-height: 100px; /* Added min-height for more vertical space */
                 }
                 .summary-item:last-child {
                     border-right: none;
