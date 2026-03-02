@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callisto Health - 친구와 함께하는 다이어트 관리</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Main JS (ES Modules) -->
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <div class="web-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">Callisto</h1>
+                <span class="logo-sub">Health</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <span class="material-icons-round">dashboard</span>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">restaurant_menu</span>
+                    <span>식단 관리</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">fitness_center</span>
+                    <span>운동 루틴</span>
+                </a>
+                <a href="statistics.html" class="nav-item active">
+                    <span class="material-icons-round">insights</span>
+                    <span>통계 및 진행상황</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">settings</span>
+                    <span>설정</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Top Header (Simplified) -->
+            <header class="top-header">
+                <div class="header-date">
+                    <span class="material-icons-round">calendar_today</span>
+                    <span id="current-date">2026년 3월 2일 월요일</span>
+                </div>
+            </header>
+
+            <!-- Dashboard Grid -->
+            <main class="dashboard-grid">
+                <!-- Greeting -->
+                <section class="greeting-section">
+                    <div>
+                        <h2>통계 및 진행상황 📈</h2>
+                        <p><strong>지금까지의 노력을 한눈에 확인하세요.</strong></p>
+                    </div>
+                </section>
+
+                <section class="card" style="min-height: 400px; display: flex; align-items: center; justify-content: center; flex-direction: column; color: var(--color-text-muted);">
+                    <span class="material-icons-round" style="font-size: 4rem; margin-bottom: 16px; color: var(--color-primary-light);">insights</span>
+                    <h3>차트 및 통계 데이터가 곧 업데이트됩니다.</h3>
+                </section>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>
