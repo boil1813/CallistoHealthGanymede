@@ -88,34 +88,42 @@ class SummaryWidget extends HTMLElement {
                     display: block;
                     background-color: var(--color-bg-card, #fff);
                     border-radius: var(--radius-md, 16px);
-                    padding: 48px 32px; /* Increased top/bottom padding for more vertical room */
+                    padding: var(--space-xl, 32px);
                     box-shadow: var(--shadow-soft);
+                }
+                .section-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: var(--space-lg);
+                }
+                .section-header h3 {
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    margin: 0;
+                    color: var(--color-text-main);
                 }
                 .summary-container {
                     display: grid;
                     grid-template-columns: 1fr 1fr 1fr;
-                    gap: 40px;
+                    gap: 32px;
+                    background-color: var(--color-bg-main);
+                    padding: 24px;
+                    border-radius: var(--radius-md);
                 }
                 .summary-item {
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
-                    padding: 8px 20px 8px 0; /* Added top/bottom padding to items */
-                    border-right: 1px dashed rgba(0,0,0,0.1);
-                    min-height: 120px; /* Slightly increased min-height */
-                }
-                .summary-item:last-child {
-                    border-right: none;
-                    padding-right: 0;
+                    justify-content: center;
                 }
                 .label {
-                    font-size: 0.95rem; /* Slightly larger */
+                    font-size: 0.9rem;
                     color: var(--color-text-muted);
-                    font-weight: 700; /* Bolder for better hierarchy */
-                    margin-bottom: 16px;
+                    font-weight: 600;
+                    margin-bottom: 12px;
                     display: flex;
                     align-items: center;
-                    gap: 8px;
+                    gap: 6px;
                 }
                 .progress-container {
                     width: 100%;
@@ -131,13 +139,12 @@ class SummaryWidget extends HTMLElement {
                 .progress-bar {
                     width: 100%;
                     height: 10px;
-                    background-color: var(--color-bg-main);
+                    background-color: rgba(0,0,0,0.05);
                     border-radius: var(--radius-pill);
                     overflow: hidden;
                 }
                 .progress-fill {
                     height: 100%;
-                    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
                     border-radius: var(--radius-pill);
                     transition: width 0.5s ease-out;
                 }
@@ -195,6 +202,7 @@ class SummaryWidget extends HTMLElement {
                     outline: none;
                     font-family: inherit;
                     color: var(--color-text-main);
+                    background-color: #fff;
                 }
                 .add-weight-form input:focus {
                     border-color: var(--color-primary);
@@ -231,19 +239,15 @@ class SummaryWidget extends HTMLElement {
                         grid-template-columns: 1fr;
                         gap: var(--space-lg);
                     }
-                    .summary-item {
-                        border-right: none;
-                        padding-right: 0;
-                        border-bottom: 1px dashed rgba(0,0,0,0.1);
-                        padding-bottom: var(--space-md);
-                    }
-                    .summary-item:last-child {
-                        border-bottom: none;
-                        padding-bottom: 0;
-                    }
                 }
             </style>
             
+            <div class="section-header">
+                <div>
+                    <h3>종합 대시보드 📊</h3>
+                </div>
+            </div>
+
             <div class="summary-container">
                 <div class="summary-item">
                     <div class="label"><span class="material-icons-round" style="color:#2ecc71; font-size:18px;">restaurant</span> 식단 달성률</div>
