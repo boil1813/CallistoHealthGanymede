@@ -319,6 +319,7 @@ body {
 }
 
 .task-input {
+    width: 100%;
     flex: 1;
     border: 1px solid rgba(0,0,0,0.1);
     background-color: var(--color-bg-main);
@@ -331,8 +332,9 @@ body {
     transition: border-color 0.2s ease;
 }
 
-.task-input:focus {
-    border-color: var(--color-primary);
+/* Specific fix for select box shrinking */
+select.task-input {
+    min-height: 40px;
 }
 
 .icon-button {
@@ -362,6 +364,25 @@ body {
 
 .add-btn:hover {
     background-color: var(--color-primary-dark);
+}
+
+.add-task-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+    align-items: center;
+}
+
+.add-task-form .task-input {
+    flex: 2;
+    min-width: 0;
+}
+
+.add-task-form .task-input.small {
+    flex: 1;
+    min-width: 0;
 }
 
 .add-exercise-form {
