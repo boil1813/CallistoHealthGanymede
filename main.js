@@ -75,6 +75,41 @@ window.editWeight = function() {
 };
 
 // ==========================================================================
+// Web Component: <summary-widget> (Placeholder for now)
+// ==========================================================================
+class SummaryWidget extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
+        this.render();
+    }
+
+    render() {
+        this.shadowRoot.innerHTML = `
+            <style>
+                :host {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: var(--color-bg-card, #fff);
+                    border-radius: var(--radius-md, 16px);
+                    padding: var(--space-xl, 32px);
+                    box-shadow: var(--shadow-soft);
+                    color: var(--color-text-muted);
+                    font-weight: 500;
+                    border: 2px dashed rgba(0,0,0,0.05);
+                }
+            </style>
+            <div>종합 대시보드 (업데이트 예정)</div>
+        `;
+    }
+}
+customElements.define('summary-widget', SummaryWidget);
+
+// ==========================================================================
 // Web Component: <task-list>
 // ==========================================================================
 class TaskList extends HTMLElement {
