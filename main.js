@@ -7,17 +7,21 @@ const MOCK_DATA = {
         currentWeight: 72.5,
         targetWeight: 68.0
     },
-    diet: [
-        { id: 1, title: '아침: 오트밀과 바나나', detail: '300 kcal', completed: true },
-        { id: 2, title: '점심: 닭가슴살 샐러드', detail: '450 kcal', completed: true },
-        { id: 3, title: '간식: 아몬드 한 줌', detail: '150 kcal', completed: false },
-        { id: 4, title: '저녁: 연어 스테이크', detail: '600 kcal', completed: false }
-    ],
+    diet: [], // Start with empty diet list
     exercise: [
         { id: 5, title: '유산소: 가볍게 런닝', detail: '30분 / 250 kcal 소모', completed: true },
         { id: 6, title: '근력: 스쿼트 & 런지', detail: '4세트', completed: false },
         { id: 7, title: '스트레칭: 요가 마무리', detail: '15분', completed: false }
     ]
+};
+
+// Global function to handle deleting tasks so it can be called from inline onclick handlers
+window.deleteTask = function(listType, id) {
+    MOCK_DATA[listType] = MOCK_DATA[listType].filter(task => task.id !== id);
+    const taskListElement = document.getElementById(`${listType}-tasks`);
+    if (taskListElement && typeof taskListElement.render === 'function') {
+        taskListElement.render();
+    }
 };
 
 // ==========================================================================
@@ -194,6 +198,7 @@ class TaskList extends HTMLElement {
                     align-items: center;
                     justify-content: center;
                     transition: all 0.2s ease;
+                    flex-shrink: 0;
                 }
                 .task-item.completed .task-checkbox {
                     background-color: var(--color-success);
@@ -207,6 +212,7 @@ class TaskList extends HTMLElement {
                 }
                 .task-content {
                     flex: 1;
+                    min-width: 0; /* allows text truncation if needed */
                 }
                 .task-title {
                     font-weight: 600;
@@ -223,19 +229,60 @@ class TaskList extends HTMLElement {
                     font-size: 0.85rem;
                     color: var(--color-text-muted);
                 }
+                .delete-btn {
+                    background: none;
+                    border: none;
+                    color: var(--color-text-muted);
+                    cursor: pointer;
+                    padding: 4px;
+                    margin-left: var(--space-sm);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                }
+                .delete-btn:hover {
+                    color: var(--color-danger);
+                    background-color: rgba(231, 76, 60, 0.1);
+                }
+                .material-icons-round {
+                    font-family: 'Material Icons Round';
+                    font-weight: normal;
+                    font-style: normal;
+                    font-size: 20px;
+                    display: inline-block;
+                    line-height: 1;
+                    text-transform: none;
+                    letter-spacing: normal;
+                    word-wrap: normal;
+                    white-space: nowrap;
+                    direction: ltr;
+                }
+                .empty-state {
+                    padding: var(--space-lg);
+                    text-align: center;
+                    color: var(--color-text-muted);
+                    font-size: 0.9rem;
+                }
             </style>
             
+            ${tasks.length === 0 ? '<div class="empty-state">등록된 항목이 없습니다.</div>' : `
             <ul class="task-list">
                 ${tasks.map(task => `
                     <li class="task-item ${task.completed ? 'completed' : ''}">
                         <div class="task-checkbox" onclick="this.closest('.task-item').classList.toggle('completed')"></div>
                         <div class="task-content">
                             <div class="task-title">${task.title}</div>
-                            <div class="task-detail">${task.detail}</div>
+                            ${task.detail ? `<div class="task-detail">${task.detail}</div>` : ''}
                         </div>
+                        <button class="delete-btn" onclick="window.deleteTask('${listType}', ${task.id})" title="삭제">
+                            <span class="material-icons-round">delete_outline</span>
+                        </button>
                     </li>
                 `).join('')}
             </ul>
+            `}
         `;
     }
 }
@@ -247,20 +294,17 @@ customElements.define('task-list', TaskList);
 document.addEventListener('DOMContentLoaded', () => {
     const addDietBtn = document.getElementById('add-diet-btn');
     const titleInput = document.getElementById('new-diet-title');
-    const detailInput = document.getElementById('new-diet-detail');
     const dietTaskList = document.getElementById('diet-tasks');
 
     if (addDietBtn) {
         addDietBtn.addEventListener('click', () => {
             const title = titleInput.value.trim();
-            const detail = detailInput.value.trim();
 
             if (title) {
                 const newId = MOCK_DATA.diet.length > 0 ? Math.max(...MOCK_DATA.diet.map(d => d.id)) + 1 : 1;
                 MOCK_DATA.diet.push({
                     id: newId,
                     title: title,
-                    detail: detail || '-',
                     completed: false
                 });
                 
@@ -269,17 +313,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     dietTaskList.render();
                 }
 
-                // Clear inputs
+                // Clear input
                 titleInput.value = '';
-                detailInput.value = '';
             }
         });
         
         // Handle Enter key
         titleInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addDietBtn.click();
-        });
-        detailInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') addDietBtn.click();
         });
     }
