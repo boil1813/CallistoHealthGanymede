@@ -1,12 +1,6 @@
 // Mock Data for Prototype
 const MOCK_DATA = {
-    summary: {
-        caloriesConsumed: 1250,
-        caloriesTarget: 1800,
-        caloriesBurned: 350,
-        currentWeight: 72.5,
-        targetWeight: 68.0
-    },
+    weight: null,
     breakfast: [],
     lunch: [],
     dinner: [],
@@ -23,39 +17,62 @@ window.deleteTask = function(listType, id) {
 };
 
 // ==========================================================================
-// Web Component: <summary-widget>
+// App Logic: Weight Tracker
 // ==========================================================================
-class SummaryWidget extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
+window.renderWeight = function() {
+    const displayArea = document.getElementById('weight-display-area');
+    const statusBadge = document.getElementById('weight-status');
+    
+    if (!displayArea || !statusBadge) return;
 
-    connectedCallback() {
-        this.render();
-    }
-
-    render() {
-        this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background-color: var(--color-bg-card, #fff);
-                    border-radius: var(--radius-md, 16px);
-                    padding: var(--space-xl, 32px);
-                    box-shadow: var(--shadow-soft);
-                    color: var(--color-text-muted);
-                    font-weight: 500;
-                    border: 2px dashed rgba(0,0,0,0.05);
-                }
-            </style>
-            <div>종합 대시보드 (업데이트 예정)</div>
+    if (MOCK_DATA.weight) {
+        statusBadge.textContent = '기록 완료';
+        statusBadge.className = 'status-badge success';
+        displayArea.innerHTML = `
+            <div class="weight-recorded">
+                ${MOCK_DATA.weight} <span>kg</span>
+                <button onclick="window.editWeight()" class="icon-button" style="margin-left: auto; width: 32px; height: 32px;" title="수정">
+                    <span class="material-icons-round" style="font-size: 1.2rem;">edit</span>
+                </button>
+            </div>
         `;
+    } else {
+        statusBadge.textContent = '미기록';
+        statusBadge.className = 'status-badge'; // default grey/muted style or fallback
+        displayArea.innerHTML = `
+            <div class="add-weight-form">
+                <input type="number" step="0.1" id="daily-weight-input" class="task-input" placeholder="00.0" style="width: 120px; font-size: 1.5rem; text-align: center; font-weight: 700;">
+                <span style="font-size: 1.2rem; font-weight: 600; color: var(--color-text-muted);">kg</span>
+                <button onclick="window.recordWeight()" class="primary-button" style="padding: 8px 16px; margin-left: var(--space-md);">기록</button>
+            </div>
+        `;
+        
+        const input = document.getElementById('daily-weight-input');
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') window.recordWeight();
+            });
+            input.focus();
+        }
     }
-}
-customElements.define('summary-widget', SummaryWidget);
+};
+
+window.recordWeight = function() {
+    const input = document.getElementById('daily-weight-input');
+    if (input && input.value.trim() !== '') {
+        // Simple validation to ensure it's a number
+        const val = parseFloat(input.value);
+        if (!isNaN(val) && val > 0) {
+            MOCK_DATA.weight = val.toFixed(1);
+            window.renderWeight();
+        }
+    }
+};
+
+window.editWeight = function() {
+    MOCK_DATA.weight = null;
+    window.renderWeight();
+};
 
 // ==========================================================================
 // Web Component: <task-list>
@@ -282,6 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
         dateElement.textContent = now.toLocaleDateString('ko-KR', options);
     }
+
+    // Initialize Weight Tracker
+    window.renderWeight();
 
     // Set up Enter key listeners for all inputs
     const inputs = document.querySelectorAll('.task-input');
