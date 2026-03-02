@@ -46,13 +46,45 @@ window.renderAll = function() {
     });
 };
 
+// Helper to get today's date string
+function getTodayString() {
+    const today = new Date();
+    return today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+}
+
 // Real-time synchronization with Firestore
 onSnapshot(userDocRef, (docSnap) => {
     if (docSnap.exists()) {
-        MOCK_DATA = docSnap.data();
+        const data = docSnap.data();
+        const todayStr = getTodayString();
+
+        // Check if it's a new day
+        if (data.lastAccessedDate && data.lastAccessedDate !== todayStr) {
+            // New day detected: Keep target weight, clear current weight, uncheck all tasks
+            MOCK_DATA = data;
+            MOCK_DATA.weight = null;
+            ['breakfast', 'lunch', 'dinner', 'exercise'].forEach(listType => {
+                if (MOCK_DATA[listType]) {
+                    MOCK_DATA[listType].forEach(task => task.completed = false);
+                }
+            });
+            MOCK_DATA.lastAccessedDate = todayStr;
+            
+            // Save the reset data back to Firestore
+            window.saveData();
+        } else {
+            // Same day, just load the data normally
+            MOCK_DATA = data;
+            if (!MOCK_DATA.lastAccessedDate) {
+                MOCK_DATA.lastAccessedDate = todayStr;
+                window.saveData();
+            }
+        }
+        
         window.renderAll();
     } else {
         // First time initialization if document doesn't exist
+        MOCK_DATA.lastAccessedDate = getTodayString();
         window.saveData();
     }
 });
