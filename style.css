@@ -413,11 +413,12 @@ select.task-input {
     display: flex;
     gap: 8px;
     align-items: center;
+    width: 100%;
 }
 
 .exercise-details-inputs .task-input.small {
-    width: 70px;
-    flex: none;
+    flex: 1;
+    min-width: 0;
 }
 
 /* Utility Classes */
@@ -481,10 +482,10 @@ select.task-input {
         width: 100%;
     }
     .exercise-details-inputs {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
     .exercise-details-inputs .add-btn {
-        width: 100%;
+        width: 40px;
         height: 40px;
     }
     .header-date {
