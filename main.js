@@ -240,3 +240,47 @@ class TaskList extends HTMLElement {
     }
 }
 customElements.define('task-list', TaskList);
+
+// ==========================================================================
+// App Logic: Add Diet
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const addDietBtn = document.getElementById('add-diet-btn');
+    const titleInput = document.getElementById('new-diet-title');
+    const detailInput = document.getElementById('new-diet-detail');
+    const dietTaskList = document.getElementById('diet-tasks');
+
+    if (addDietBtn) {
+        addDietBtn.addEventListener('click', () => {
+            const title = titleInput.value.trim();
+            const detail = detailInput.value.trim();
+
+            if (title) {
+                const newId = MOCK_DATA.diet.length > 0 ? Math.max(...MOCK_DATA.diet.map(d => d.id)) + 1 : 1;
+                MOCK_DATA.diet.push({
+                    id: newId,
+                    title: title,
+                    detail: detail || '-',
+                    completed: false
+                });
+                
+                // Re-render the task list component
+                if (dietTaskList && typeof dietTaskList.render === 'function') {
+                    dietTaskList.render();
+                }
+
+                // Clear inputs
+                titleInput.value = '';
+                detailInput.value = '';
+            }
+        });
+        
+        // Handle Enter key
+        titleInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addDietBtn.click();
+        });
+        detailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addDietBtn.click();
+        });
+    }
+});

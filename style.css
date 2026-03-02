@@ -356,6 +356,47 @@ body {
     color: #d4ac0d; 
 }
 
+/* Add Task Form */
+.add-task-form {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px dashed rgba(0,0,0,0.05);
+}
+
+.task-input {
+    flex: 2;
+    border: 1px solid rgba(0,0,0,0.1);
+    background-color: var(--color-bg-main);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--color-text-main);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.task-input:focus {
+    border-color: var(--color-primary);
+}
+
+.task-input.small {
+    flex: 1;
+}
+
+.add-btn {
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-sm);
+}
+
+.add-btn:hover {
+    background-color: var(--color-primary-dark);
+    color: white;
+}
+
 /* Utility Classes */
 .card {
     background-color: var(--color-bg-card);

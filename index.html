@@ -73,11 +73,8 @@
                 <section class="greeting-section">
                     <div>
                         <h2>오늘도 화이팅하세요! 🚀</h2>
-                        <p>매니저 <strong>'지민'</strong>님이 오늘의 일정과 식단을 업데이트했습니다.</p>
+                        <p>오늘의 <strong>식단과 운동 루틴</strong>을 기록해보세요.</p>
                     </div>
-                    <button class="primary-button">
-                        <span class="material-icons-round">add</span> 새 기록 추가
-                    </button>
                 </section>
 
                 <!-- Summary Widget (Web Component) -->
@@ -93,8 +90,15 @@
                                 <h3>오늘의 식단 🥗</h3>
                                 <p class="section-subtitle">권장 칼로리: 1800kcal</p>
                             </div>
-                            <span class="status-badge success">매니저 승인됨</span>
+                            <span class="status-badge success">오늘의 기록</span>
                         </div>
+                        
+                        <div class="add-task-form">
+                            <input type="text" id="new-diet-title" class="task-input" placeholder="메뉴 (예: 닭가슴살 샐러드)">
+                            <input type="text" id="new-diet-detail" class="task-input small" placeholder="칼로리 (예: 300 kcal)">
+                            <button id="add-diet-btn" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                        </div>
+
                         <!-- Task List Web Component for Diet -->
                         <task-list id="diet-tasks"></task-list>
                     </section>
