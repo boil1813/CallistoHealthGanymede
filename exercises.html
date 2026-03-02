@@ -129,49 +129,14 @@
                             <span class="status-badge" style="background-color: rgba(78, 205, 196, 0.15); color: var(--color-secondary);">가슴/등/어깨</span>
                         </div>
                         
-                        <ul class="exercise-list">
-                            <li>
-                                <div>
-                                    <div class="ex-name">벤치프레스</div>
-                                    <div class="ex-desc">가슴 전체의 근육을 키워주는 대표적인 상체 운동</div>
-                                </div>
-                                <span class="muscle-badge">가슴</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">바벨 로우</div>
-                                    <div class="ex-desc">등의 두께감을 만들어주는 프리웨이트 운동</div>
-                                </div>
-                                <span class="muscle-badge">등</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">풀업 (턱걸이)</div>
-                                    <div class="ex-desc">광배근을 발달시켜 넓은 등을 만들어주는 운동</div>
-                                </div>
-                                <span class="muscle-badge">등</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">덤벨 숄더 프레스</div>
-                                    <div class="ex-desc">어깨의 전면과 측면 삼각근을 발달시키는 운동</div>
-                                </div>
-                                <span class="muscle-badge">어깨</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">사이드 레터럴 레이즈</div>
-                                    <div class="ex-desc">어깨의 측면 볼륨을 키워주는 고립 운동</div>
-                                </div>
-                                <span class="muscle-badge">어깨</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">푸시업 (팔굽혀펴기)</div>
-                                    <div class="ex-desc">어디서나 할 수 있는 가장 기본적인 가슴/삼두 운동</div>
-                                </div>
-                                <span class="muscle-badge">가슴/팔</span>
-                            </li>
+                        <div class="add-task-form">
+                            <input type="text" id="new-upper-name" class="task-input" placeholder="새 상체 운동 이름">
+                            <input type="text" id="new-upper-target" class="task-input small" placeholder="타겟 부위 (예: 가슴)">
+                            <button id="add-upper-btn" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                        </div>
+
+                        <ul class="exercise-list" id="upper-exercise-list">
+                            <!-- Populated dynamically -->
                         </ul>
                     </section>
 
@@ -183,50 +148,15 @@
                             </div>
                             <span class="status-badge" style="background-color: rgba(255, 107, 107, 0.15); color: var(--color-primary);">대퇴사두/햄스트링</span>
                         </div>
+
+                        <div class="add-task-form">
+                            <input type="text" id="new-lower-name" class="task-input" placeholder="새 하체 운동 이름">
+                            <input type="text" id="new-lower-target" class="task-input small" placeholder="타겟 부위 (예: 종아리)">
+                            <button id="add-lower-btn" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                        </div>
                         
-                        <ul class="exercise-list">
-                            <li>
-                                <div>
-                                    <div class="ex-name">스쿼트</div>
-                                    <div class="ex-desc">하체 전체와 코어를 강화하는 웨이트 트레이닝의 꽃</div>
-                                </div>
-                                <span class="muscle-badge">전체</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">레그 프레스</div>
-                                    <div class="ex-desc">기구를 이용해 허리 부담 없이 하체에 집중하는 운동</div>
-                                </div>
-                                <span class="muscle-badge">허벅지 앞</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">런지</div>
-                                    <div class="ex-desc">균형 감각과 힙업, 허벅지 라인을 가꿔주는 운동</div>
-                                </div>
-                                <span class="muscle-badge">엉덩이/허벅지</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">데드리프트</div>
-                                    <div class="ex-desc">하체 뒷면(햄스트링)과 엉덩이, 기립근을 강화하는 운동</div>
-                                </div>
-                                <span class="muscle-badge">하체 뒷면</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">레그 익스텐션</div>
-                                    <div class="ex-desc">허벅지 앞쪽(대퇴사두근)의 근육을 선명하게 갈라주는 운동</div>
-                                </div>
-                                <span class="muscle-badge">허벅지 앞</span>
-                            </li>
-                            <li>
-                                <div>
-                                    <div class="ex-name">카프 레이즈</div>
-                                    <div class="ex-desc">발뒤꿈치를 들어 올려 종아리 근육을 단련하는 운동</div>
-                                </div>
-                                <span class="muscle-badge">종아리</span>
-                            </li>
+                        <ul class="exercise-list" id="lower-exercise-list">
+                            <!-- Populated dynamically -->
                         </ul>
                     </section>
                 </div>
@@ -234,15 +164,7 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const dateElement = document.getElementById('current-date-exercises');
-            if (dateElement) {
-                const now = new Date();
-                const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-                dateElement.textContent = now.toLocaleDateString('ko-KR', options);
-            }
-        });
-    </script>
+    <!-- Scripts -->
+    <script type="module" src="exercises.js"></script>
 </body>
 </html>
