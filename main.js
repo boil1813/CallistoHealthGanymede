@@ -88,17 +88,17 @@ class SummaryWidget extends HTMLElement {
                     display: block;
                     background-color: var(--color-bg-card, #fff);
                     border-radius: var(--radius-md, 16px);
-                    padding: var(--space-xl, 32px);
+                    padding: var(--space-xl, 32px); /* Match exactly with regular .card */
                     box-shadow: var(--shadow-soft);
-                    border: 2px solid red; /* DEBUG: Host boundary */
+                    border: 2px solid red; /* DEBUG: Host boundary (should now match regular cards) */
                 }
                 .section-header {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center; /* Changed from flex-start to align items vertically */
-                    margin-bottom: var(--space-lg);
+                    align-items: flex-start; /* Match exactly with regular .section-header */
+                    margin-bottom: var(--space-md); /* Match exactly with regular .section-header */
                     border: 2px solid blue; /* DEBUG: Header boundary */
-                    padding: 8px; /* Added some padding to see the boundary clearly */
+                    padding: 8px; /* Match exactly with regular .section-header from style.css */
                 }
                 .section-header h3 {
                     font-size: 1.25rem;
