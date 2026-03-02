@@ -90,7 +90,7 @@
                                 <h4>아침 🍳</h4>
                                 <div class="add-task-form mini">
                                     <input type="text" id="new-breakfast-title" class="task-input" placeholder="아침 메뉴 추가">
-                                    <button onclick="window.addNewTask('breakfast')" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                    <button onclick="window.addNewTask('breakfast')" class="add-btn"><span class="material-icons-round">add</span></button>
                                 </div>
                             </div>
                             <task-list id="breakfast-tasks"></task-list>
@@ -102,7 +102,7 @@
                                 <h4>점심 ☀️</h4>
                                 <div class="add-task-form mini">
                                     <input type="text" id="new-lunch-title" class="task-input" placeholder="점심 메뉴 추가">
-                                    <button onclick="window.addNewTask('lunch')" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                    <button onclick="window.addNewTask('lunch')" class="add-btn"><span class="material-icons-round">add</span></button>
                                 </div>
                             </div>
                             <task-list id="lunch-tasks"></task-list>
@@ -114,7 +114,7 @@
                                 <h4>저녁 🌙</h4>
                                 <div class="add-task-form mini">
                                     <input type="text" id="new-dinner-title" class="task-input" placeholder="저녁 메뉴 추가">
-                                    <button onclick="window.addNewTask('dinner')" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                    <button onclick="window.addNewTask('dinner')" class="add-btn"><span class="material-icons-round">add</span></button>
                                 </div>
                             </div>
                             <task-list id="dinner-tasks"></task-list>
@@ -126,7 +126,7 @@
                                 <h4>운동후 💪</h4>
                                 <div class="add-task-form mini">
                                     <input type="text" id="new-postWorkout-title" class="task-input" placeholder="운동후 메뉴 추가">
-                                    <button onclick="window.addNewTask('postWorkout')" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                    <button onclick="window.addNewTask('postWorkout')" class="add-btn"><span class="material-icons-round">add</span></button>
                                 </div>
                             </div>
                             <task-list id="postWorkout-tasks"></task-list>
@@ -160,7 +160,7 @@
                                     <input type="number" id="new-strength-weight" class="task-input small" placeholder="무게(kg)">
                                     <input type="number" id="new-strength-reps" class="task-input small" placeholder="횟수">
                                     <input type="number" id="new-strength-sets" class="task-input small" placeholder="세트">
-                                    <button onclick="window.addExerciseTask()" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                    <button onclick="window.addExerciseTask()" class="add-btn"><span class="material-icons-round">add</span></button>
                                 </div>
                             </div>
 
@@ -171,7 +171,7 @@
                                     <input type="number" step="0.1" id="new-cardio-speed" class="task-input small" placeholder="속도">
                                     <input type="number" step="0.1" id="new-cardio-incline" class="task-input small" placeholder="경사도">
                                     <input type="number" id="new-cardio-time" class="task-input small" placeholder="시간(분)">
-                                    <button onclick="window.addExerciseTask()" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                    <button onclick="window.addExerciseTask()" class="add-btn"><span class="material-icons-round">add</span></button>
                                 </div>
                             </div>
                         </div>
@@ -182,6 +182,26 @@
                 </div>
             </main>
         </div>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-nav">
+            <a href="index.html" class="nav-item active">
+                <span class="material-icons-round">dashboard</span>
+                <span>대시보드</span>
+            </a>
+            <a href="exercises.html" class="nav-item">
+                <span class="material-icons-round">fitness_center</span>
+                <span>운동</span>
+            </a>
+            <a href="statistics.html" class="nav-item">
+                <span class="material-icons-round">insights</span>
+                <span>달력</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-icons-round">settings</span>
+                <span>설정</span>
+            </a>
+        </nav>
     </div>
 </body>
 </html>

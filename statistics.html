@@ -59,23 +59,23 @@
             border-color: rgba(0,0,0,0.03);
         }
         .fc-daygrid-day-number {
-            font-weight: 600; /* Made slightly bolder for general readability */
+            font-weight: 600;
             color: var(--color-text-main);
             padding: 8px !important;
-            text-decoration: none !important; /* Remove any default underline */
+            text-decoration: none !important;
         }
         .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
             background-color: var(--color-primary);
-            color: white !important; /* Force white color */
+            color: white !important;
             border-radius: 50%;
-            min-width: 32px; /* Use min-width instead of fixed width to prevent text wrap */
+            min-width: 32px;
             height: 32px;
-            display: inline-flex; /* Use inline-flex to center content perfectly */
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             margin: 4px;
-            padding: 0 !important; /* Remove internal padding to ensure perfect circle */
-            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3); /* Add subtle shadow for emphasis */
+            padding: 0 !important;
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
         }
         /* Custom Event Dot */
         .record-dot {
@@ -250,6 +250,26 @@
                 </div>
             </main>
         </div>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-nav">
+            <a href="index.html" class="nav-item">
+                <span class="material-icons-round">dashboard</span>
+                <span>대시보드</span>
+            </a>
+            <a href="exercises.html" class="nav-item">
+                <span class="material-icons-round">fitness_center</span>
+                <span>운동</span>
+            </a>
+            <a href="statistics.html" class="nav-item active">
+                <span class="material-icons-round">insights</span>
+                <span>달력</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-icons-round">settings</span>
+                <span>설정</span>
+            </a>
+        </nav>
     </div>
 
     <!-- Statistics JS (Firebase & Calendar Logic) -->

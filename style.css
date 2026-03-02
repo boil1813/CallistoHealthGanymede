@@ -155,6 +155,40 @@ body {
     padding-top: var(--space-lg);
 }
 
+/* Bottom Navigation (Mobile Only) */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg-card);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding: var(--space-sm) 0;
+    z-index: 1000;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+}
+
+.mobile-nav .nav-item {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+}
+
+.mobile-nav .nav-item .material-icons-round {
+    font-size: 1.5rem;
+}
+
+.mobile-nav .nav-item.active {
+    background-color: transparent;
+    color: var(--color-primary);
+}
+
 /* Main Content Area */
 .main-content {
     flex: 1;
@@ -221,28 +255,6 @@ body {
     font-size: 1rem;
 }
 
-.primary-button {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    color: white;
-    border: none;
-    padding: 12px var(--space-lg);
-    border-radius: var(--radius-pill);
-    font-weight: 600;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-
-.primary-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
-}
-
 /* Plan Columns (Diet and Exercise side-by-side on desktop) */
 .plan-columns {
     display: grid;
@@ -255,18 +267,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
 }
 
 .section-header h3 {
     font-size: 1.25rem;
     font-weight: 700;
-}
-
-.section-subtitle {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    margin-top: 2px;
 }
 
 .status-badge {
@@ -286,29 +292,9 @@ body {
     color: #d4ac0d; 
 }
 
-/* Add Task Form */
-.add-task-form {
-    display: flex;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-    padding-bottom: var(--space-md);
-    border-bottom: 1px dashed rgba(0,0,0,0.05);
-}
-
-.add-task-form.mini {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-    flex: 1;
-    max-width: 250px;
-}
-
+/* Forms & Buttons (Improved visibility) */
 .meal-group {
     margin-bottom: var(--space-lg);
-}
-
-.meal-group:last-child {
-    margin-bottom: 0;
 }
 
 .meal-header {
@@ -316,17 +302,24 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--space-sm);
-    padding-left: var(--space-xs);
+    gap: 12px;
 }
 
 .meal-header h4 {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--color-text-main);
+    flex-shrink: 0;
+}
+
+.add-task-form.mini {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    align-items: center;
 }
 
 .task-input {
-    flex: 2;
+    flex: 1;
     border: 1px solid rgba(0,0,0,0.1);
     background-color: var(--color-bg-main);
     padding: 8px 12px;
@@ -338,79 +331,72 @@ body {
     transition: border-color 0.2s ease;
 }
 
-.add-task-form.mini .task-input {
-    padding: 6px 10px;
-}
-
 .task-input:focus {
     border-color: var(--color-primary);
 }
 
-.task-input.small {
-    flex: 1;
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
 }
 
 .add-btn {
+    width: 36px;
+    height: 36px;
     background-color: var(--color-primary);
     color: white;
     border-radius: var(--radius-sm);
-}
-
-.add-task-form.mini .add-btn {
-    width: 32px;
-    height: 32px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
 }
 
 .add-btn:hover {
     background-color: var(--color-primary-dark);
-    color: white;
 }
 
 .add-exercise-form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-    padding-bottom: var(--space-md);
-    border-bottom: 1px dashed rgba(0,0,0,0.05);
+    gap: 12px;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
 }
 
 .exercise-type-selector {
     display: flex;
-    gap: var(--space-md);
-    margin-bottom: 8px;
+    gap: 16px;
+    margin-bottom: 4px;
 }
 
 .type-radio {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--color-text-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 4px;
 }
 
-.type-radio input[type="radio"] {
-    accent-color: var(--color-primary);
-}
-
-.exercise-input-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-}
-
 .exercise-details-inputs {
     display: flex;
-    gap: var(--space-sm);
+    gap: 8px;
     align-items: center;
 }
 
 .exercise-details-inputs .task-input.small {
-    flex: 1;
-    min-width: 0;
-    padding: 6px 10px;
+    width: 70px;
+    flex: none;
 }
 
 /* Utility Classes */
@@ -420,28 +406,6 @@ body {
     padding: var(--space-xl);
     box-shadow: var(--shadow-soft);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.plan-section .section-header {
-    margin-bottom: var(--space-md);
-}
-
-.meal-group {
-    margin-bottom: var(--space-lg);
-}
-
-.add-task-form.mini {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-    flex: 1;
-    max-width: 250px;
-}
-
-.exercise-details-inputs {
-    display: flex;
-    gap: var(--space-sm);
-    align-items: center;
 }
 
 .card:hover {
@@ -454,26 +418,56 @@ body {
     .plan-columns {
         grid-template-columns: 1fr;
     }
+    .top-header, .dashboard-grid {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
 }
 
 @media (max-width: 768px) {
     .sidebar {
-        display: none; /* Hide sidebar on small screens for this prototype */
+        display: none; 
+    }
+    .mobile-nav {
+        display: flex;
     }
     .main-content {
         margin-left: 0;
+        padding-bottom: 80px; /* Space for bottom nav */
     }
     .top-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--space-md);
+        padding: var(--space-md);
+        justify-content: center;
     }
-    .search-bar {
-        width: 100%;
+    .dashboard-grid {
+        padding: 0 var(--space-md) var(--space-xl);
+        gap: 24px;
+    }
+    .card {
+        padding: var(--space-lg) var(--space-md);
     }
     .greeting-section {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--space-md);
+        text-align: center;
+    }
+    .meal-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .add-task-form.mini {
+        width: 100%;
+    }
+    .exercise-details-inputs {
+        flex-wrap: wrap;
+    }
+    .exercise-details-inputs .add-btn {
+        width: 100%;
+        height: 40px;
+    }
+    .header-date {
+        width: 100%;
+        justify-content: center;
     }
 }
