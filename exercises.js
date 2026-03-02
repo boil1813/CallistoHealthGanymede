@@ -129,15 +129,19 @@ function renderList(type) {
 window.addExerciseToDict = function(type) {
     const nameInput = document.getElementById(`new-${type}-name`);
     const targetInput = document.getElementById(`new-${type}-target`);
+    const imageInput = document.getElementById(`new-${type}-image`);
     
     const name = nameInput.value.trim();
     const target = targetInput.value.trim() || '미지정';
+    let image = imageInput.value.trim();
 
     if (name) {
         const newId = type.charAt(0) + Date.now().toString(36); // Generate pseudo-unique ID
         
-        // Use a reliable placeholder image service, appending a random number to avoid aggressive caching
-        const autoImage = `https://loremflickr.com/200/200/fitness,gym?random=${Math.floor(Math.random() * 1000)}`;
+        // Use manual image if provided, otherwise fallback to auto placeholder
+        if (!image) {
+            image = `https://loremflickr.com/200/200/fitness,gym?random=${Math.floor(Math.random() * 1000)}`;
+        }
         
         if (!MOCK_DATA.exerciseDictionary) MOCK_DATA.exerciseDictionary = {};
         if (!MOCK_DATA.exerciseDictionary[type]) MOCK_DATA.exerciseDictionary[type] = [];
@@ -146,13 +150,14 @@ window.addExerciseToDict = function(type) {
             id: newId,
             name: name,
             target: target,
-            image: autoImage
+            image: image
         });
         
         saveData(); // onSnapshot will trigger re-render
         
         nameInput.value = '';
         targetInput.value = '';
+        imageInput.value = '';
         nameInput.focus();
     }
 };
