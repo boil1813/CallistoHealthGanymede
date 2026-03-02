@@ -292,6 +292,14 @@ customElements.define('task-list', TaskList);
 // App Logic: Add Diet
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Set Current Date
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        dateElement.textContent = now.toLocaleDateString('ko-KR', options);
+    }
+
     const addDietBtn = document.getElementById('add-diet-btn');
     const titleInput = document.getElementById('new-diet-title');
     const dietTaskList = document.getElementById('diet-tasks');

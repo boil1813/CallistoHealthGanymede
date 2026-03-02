@@ -163,102 +163,31 @@ body {
     flex-direction: column;
 }
 
-/* Top Header */
+/* Top Header (Simplified) */
 .top-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Align the date to the right */
     align-items: center;
     padding: var(--space-md) var(--space-xl);
     background-color: transparent;
-    border-bottom: 1px solid rgba(0,0,0,0.03);
 }
 
-.search-bar {
+.header-date {
     display: flex;
     align-items: center;
-    background-color: var(--color-bg-card);
-    padding: 8px var(--space-md);
+    gap: 8px;
+    background: var(--color-bg-card);
+    padding: 8px 16px;
     border-radius: var(--radius-pill);
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    width: 300px;
-}
-
-.search-bar .material-icons-round {
-    color: var(--color-text-muted);
-    font-size: 1.2rem;
-}
-
-.search-bar input {
-    border: none;
-    background: transparent;
-    padding: 4px 8px;
-    outline: none;
-    font-family: inherit;
-    font-size: 0.95rem;
-    color: var(--color-text-main);
-    width: 100%;
-}
-
-.search-bar input::placeholder {
-    color: var(--color-text-muted);
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-}
-
-.icon-button {
-    background: var(--color-bg-card);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--color-text-muted);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    transition: all 0.2s ease;
-}
-
-.icon-button:hover {
-    color: var(--color-primary);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--color-bg-card);
-    padding: 6px 16px 6px 6px;
-    border-radius: var(--radius-pill);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    cursor: pointer;
-    transition: box-shadow 0.2s ease;
-}
-
-.user-profile:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-}
-
-.user-profile .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-}
-
-.user-profile .user-name {
     font-size: 0.9rem;
     font-weight: 600;
+    color: var(--color-text-muted);
 }
 
-.user-profile .expand-icon {
-    font-size: 1rem;
-    color: var(--color-text-muted);
+.header-date .material-icons-round {
+    font-size: 1.1rem;
+    color: var(--color-primary);
 }
 
 /* Dashboard Grid */
