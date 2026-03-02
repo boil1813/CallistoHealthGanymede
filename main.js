@@ -1,10 +1,18 @@
-// Mock Data for Prototype
-const MOCK_DATA = {
+// Initialize Data from LocalStorage or use defaults
+const LOCAL_STORAGE_KEY = 'callisto_health_data';
+const defaultData = {
     weight: null,
     breakfast: [],
     lunch: [],
     dinner: [],
     exercise: []
+};
+
+let MOCK_DATA = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || defaultData;
+
+// Function to save data back to LocalStorage
+window.saveData = function() {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(MOCK_DATA));
 };
 
 window.updateSummary = function() {
@@ -23,6 +31,7 @@ window.toggleTask = function(listType, id) {
             taskListElement.render();
         }
         window.updateSummary();
+        window.saveData(); // Save changes
     }
 };
 
@@ -34,6 +43,7 @@ window.deleteTask = function(listType, id) {
         taskListElement.render();
     }
     window.updateSummary();
+    window.saveData(); // Save changes
 };
 
 // ==========================================================================
@@ -304,6 +314,7 @@ class SummaryWidget extends HTMLElement {
             if (!isNaN(val) && val > 0) {
                 MOCK_DATA.weight = val.toFixed(1);
                 this.render();
+                window.saveData(); // Save changes
             }
         }
     }
@@ -311,6 +322,7 @@ class SummaryWidget extends HTMLElement {
     editWeight() {
         MOCK_DATA.weight = null;
         this.render();
+        window.saveData(); // Save changes
     }
 }
 customElements.define('summary-widget', SummaryWidget);
@@ -485,6 +497,7 @@ window.addNewTask = function(mealType) {
             taskListElement.render();
         }
         window.updateSummary();
+        window.saveData(); // Save changes
 
         titleInput.value = '';
     }
@@ -524,6 +537,7 @@ window.addExerciseTask = function() {
             taskListElement.render();
         }
         window.updateSummary();
+        window.saveData(); // Save changes
 
         titleInput.value = '';
         weightInput.value = '';
