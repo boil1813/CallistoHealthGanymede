@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Callisto Health - 친구와 함께하는 다이어트 관리</title>
+    <title>Callisto Health - 통계 및 달력</title>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,8 +12,150 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- Main CSS -->
     <link rel="stylesheet" href="style.css">
-    <!-- Main JS (ES Modules) -->
-    <script type="module" src="main.js"></script>
+    <!-- FullCalendar CSS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <style>
+        /* Specific styles for statistics page layout */
+        .stats-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+            align-items: start;
+        }
+
+        /* FullCalendar Customization */
+        #calendar-container {
+            background-color: var(--color-bg-card);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-soft);
+        }
+        .fc {
+            --fc-page-bg-color: var(--color-bg-card);
+            --fc-neutral-bg-color: var(--color-bg-main);
+            --fc-border-color: rgba(0,0,0,0.05);
+            --fc-button-text-color: var(--color-text-main);
+            --fc-button-bg-color: transparent;
+            --fc-button-border-color: rgba(0,0,0,0.1);
+            --fc-button-hover-bg-color: var(--color-bg-main);
+            --fc-button-hover-border-color: rgba(0,0,0,0.2);
+            --fc-button-active-bg-color: var(--color-bg-main);
+            --fc-button-active-border-color: rgba(0,0,0,0.2);
+            --fc-today-bg-color: rgba(255, 107, 107, 0.05); /* Light primary */
+            font-family: var(--font-family-main);
+        }
+        .fc .fc-toolbar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+        }
+        .fc-theme-standard th {
+            padding: 8px 0;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            border: none;
+        }
+        .fc-theme-standard td, .fc-theme-standard th {
+            border-color: rgba(0,0,0,0.03);
+        }
+        .fc-daygrid-day-number {
+            font-weight: 500;
+            color: var(--color-text-main);
+            padding: 8px !important;
+        }
+        .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4px;
+        }
+        /* Custom Event Dot */
+        .record-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-success);
+            border-radius: 50%;
+            margin: 0 auto;
+            margin-top: 2px;
+        }
+
+        /* Daily Detail Panel */
+        .daily-detail-panel {
+            background-color: var(--color-bg-card);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-soft);
+            min-height: 500px;
+        }
+        .detail-header {
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .detail-header h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-text-main);
+            margin: 0;
+        }
+        .detail-section {
+            margin-bottom: var(--space-lg);
+        }
+        .detail-section h4 {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .detail-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .detail-list li {
+            padding: 8px 12px;
+            background-color: var(--color-bg-main);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .detail-list li .meta {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+        }
+        .weight-display {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+        }
+        .weight-display span {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+        }
+        .empty-state-msg {
+            color: var(--color-text-muted);
+            font-style: italic;
+            text-align: center;
+            padding: var(--space-lg);
+            background-color: var(--color-bg-main);
+            border-radius: var(--radius-sm);
+        }
+        
+        @media (max-width: 1024px) {
+            .stats-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="web-layout">
@@ -38,7 +180,7 @@
                 </a>
                 <a href="statistics.html" class="nav-item active">
                     <span class="material-icons-round">insights</span>
-                    <span>통계 및 진행상황</span>
+                    <span>통계 및 달력</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -51,11 +193,11 @@
 
         <!-- Main Content Area -->
         <div class="main-content">
-            <!-- Top Header (Simplified) -->
+            <!-- Top Header -->
             <header class="top-header">
                 <div class="header-date">
                     <span class="material-icons-round">calendar_today</span>
-                    <span id="current-date">2026년 3월 2일 월요일</span>
+                    <span id="current-date-stats"></span>
                 </div>
             </header>
 
@@ -64,18 +206,50 @@
                 <!-- Greeting -->
                 <section class="greeting-section">
                     <div>
-                        <h2>통계 및 진행상황 📈</h2>
-                        <p><strong>지금까지의 노력을 한눈에 확인하세요.</strong></p>
+                        <h2>나의 기록 모아보기 📅</h2>
+                        <p><strong>달력의 날짜를 클릭하여 그날의 기록을 확인하세요.</strong></p>
                     </div>
                 </section>
 
-                <section class="card" style="min-height: 400px; display: flex; align-items: center; justify-content: center; flex-direction: column; color: var(--color-text-muted);">
-                    <span class="material-icons-round" style="font-size: 4rem; margin-bottom: 16px; color: var(--color-primary-light);">insights</span>
-                    <h3>차트 및 통계 데이터가 곧 업데이트됩니다.</h3>
-                </section>
+                <div class="stats-layout">
+                    <!-- Calendar Section -->
+                    <section id="calendar-container">
+                        <div id="calendar"></div>
+                    </section>
 
+                    <!-- Daily Detail Section -->
+                    <section class="daily-detail-panel">
+                        <div class="detail-header">
+                            <h3 id="selected-date-title">날짜를 선택하세요</h3>
+                        </div>
+
+                        <div id="detail-content" style="display: none;">
+                            <div class="detail-section">
+                                <h4><span class="material-icons-round" style="color:var(--color-primary);">monitor_weight</span> 체중</h4>
+                                <div id="detail-weight"></div>
+                            </div>
+
+                            <div class="detail-section">
+                                <h4><span class="material-icons-round" style="color:#2ecc71;">restaurant</span> 식단</h4>
+                                <ul class="detail-list" id="detail-diet"></ul>
+                            </div>
+
+                            <div class="detail-section">
+                                <h4><span class="material-icons-round" style="color:#f1c40f;">fitness_center</span> 운동</h4>
+                                <ul class="detail-list" id="detail-exercise"></ul>
+                            </div>
+                        </div>
+                        
+                        <div id="detail-empty" class="empty-state-msg" style="display: block;">
+                            이 날은 기록된 데이터가 없습니다.
+                        </div>
+                    </section>
+                </div>
             </main>
         </div>
     </div>
+
+    <!-- Statistics JS (Firebase & Calendar Logic) -->
+    <script type="module" src="statistics.js"></script>
 </body>
 </html>
