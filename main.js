@@ -786,9 +786,9 @@ document.addEventListener('DOMContentLoaded', () => {
         radio.addEventListener('change', (e) => {
             if (e.target.value === 'cardio') {
                 strengthInputs.style.display = 'none';
-                cardioInputs.style.display = 'flex';
+                cardioInputs.style.display = 'flex'; // Use flex to maintain alignment
             } else {
-                strengthInputs.style.display = 'flex';
+                strengthInputs.style.display = 'flex'; // Use flex to maintain alignment
                 cardioInputs.style.display = 'none';
                 const subtype = e.target.value.split('-')[1]; // upper or lower
                 populateExerciseDropdown(subtype);
