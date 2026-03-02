@@ -59,20 +59,23 @@
             border-color: rgba(0,0,0,0.03);
         }
         .fc-daygrid-day-number {
-            font-weight: 500;
+            font-weight: 600; /* Made slightly bolder for general readability */
             color: var(--color-text-main);
             padding: 8px !important;
+            text-decoration: none !important; /* Remove any default underline */
         }
         .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
             background-color: var(--color-primary);
-            color: white;
+            color: white !important; /* Force white color */
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
+            min-width: 32px; /* Use min-width instead of fixed width to prevent text wrap */
+            height: 32px;
+            display: inline-flex; /* Use inline-flex to center content perfectly */
             align-items: center;
             justify-content: center;
             margin: 4px;
+            padding: 0 !important; /* Remove internal padding to ensure perfect circle */
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3); /* Add subtle shadow for emphasis */
         }
         /* Custom Event Dot */
         .record-dot {
