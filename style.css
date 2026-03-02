@@ -409,6 +409,13 @@ select.task-input {
     gap: 4px;
 }
 
+.exercise-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
 .exercise-details-inputs {
     display: flex;
     gap: 8px;
@@ -419,6 +426,12 @@ select.task-input {
 .exercise-details-inputs .task-input.small {
     flex: 1;
     min-width: 0;
+}
+
+.exercise-details-inputs .add-btn {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
 }
 
 /* Utility Classes */
