@@ -141,15 +141,12 @@ class SummaryWidget extends HTMLElement {
                     border-radius: var(--radius-md, 16px);
                     padding: var(--space-xl, 32px);
                     box-shadow: var(--shadow-soft);
-                    border: 2px solid red; /* DEBUG */
                 }
                 .section-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: var(--space-lg);
-                    border: 2px solid blue; /* DEBUG */
-                    padding: 8px;
                 }
                 .section-header h3 {
                     font-size: 1.25rem;
@@ -164,14 +161,11 @@ class SummaryWidget extends HTMLElement {
                     background-color: var(--color-bg-main);
                     padding: 24px;
                     border-radius: var(--radius-md);
-                    border: 2px solid green; /* DEBUG */
                 }
                 .summary-item {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
-                    border: 2px dashed purple; /* DEBUG */
-                    padding: 8px;
                     min-height: 120px;
                 }
                 .label {
@@ -390,13 +384,11 @@ class TaskList extends HTMLElement {
                     border-radius: var(--radius-md, 16px);
                     box-shadow: var(--shadow-soft);
                     overflow: hidden;
-                    border: 2px solid cyan; /* DEBUG */
                 }
                 .task-list {
                     list-style: none;
                     margin: 0;
                     padding: 0;
-                    border: 2px dashed magenta; /* DEBUG */
                 }
                 .task-item {
                     display: flex;
@@ -404,7 +396,6 @@ class TaskList extends HTMLElement {
                     padding: var(--space-md) var(--space-lg);
                     border-bottom: 1px solid var(--color-bg-main);
                     transition: background-color 0.2s ease;
-                    border: 1px solid brown; /* DEBUG */
                 }
                 .task-item:last-child {
                     border-bottom: none;
