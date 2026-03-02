@@ -138,9 +138,10 @@ window.addExerciseToDict = function(type) {
     if (name) {
         const newId = type.charAt(0) + Date.now().toString(36); // Generate pseudo-unique ID
         
-        // Use manual image if provided, otherwise fallback to auto placeholder
+        // Use manual image if provided, otherwise fallback to auto placeholder BASED ON NAME
         if (!image) {
-            image = `https://loremflickr.com/200/200/fitness,gym?random=${Math.floor(Math.random() * 1000)}`;
+            // Use name as keyword for more relevant images
+            image = `https://loremflickr.com/200/200/${encodeURIComponent(name)},workout/all?random=${Math.floor(Math.random() * 1000)}`;
         }
         
         if (!MOCK_DATA.exerciseDictionary) MOCK_DATA.exerciseDictionary = {};
