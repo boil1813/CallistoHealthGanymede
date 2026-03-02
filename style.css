@@ -386,28 +386,6 @@ body {
     padding: 6px 10px;
 }
 
-/* Weight Tracker */
-.add-weight-form {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-}
-
-.weight-recorded {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--color-primary);
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-}
-
-.weight-recorded span {
-    font-size: 1.2rem;
-    color: var(--color-text-muted);
-    font-weight: 600;
-}
-
 /* Utility Classes */
 .card {
     background-color: var(--color-bg-card);

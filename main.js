@@ -7,6 +7,25 @@ const MOCK_DATA = {
     exercise: []
 };
 
+window.updateSummary = function() {
+    const summaryWidget = document.querySelector('summary-widget');
+    if (summaryWidget && typeof summaryWidget.render === 'function') {
+        summaryWidget.render();
+    }
+};
+
+window.toggleTask = function(listType, id) {
+    const task = MOCK_DATA[listType].find(t => t.id === id);
+    if (task) {
+        task.completed = !task.completed;
+        const taskListElement = document.getElementById(`${listType}-tasks`);
+        if (taskListElement && typeof taskListElement.render === 'function') {
+            taskListElement.render();
+        }
+        window.updateSummary();
+    }
+};
+
 // Global function to handle deleting tasks so it can be called from inline onclick handlers
 window.deleteTask = function(listType, id) {
     MOCK_DATA[listType] = MOCK_DATA[listType].filter(task => task.id !== id);
@@ -14,68 +33,11 @@ window.deleteTask = function(listType, id) {
     if (taskListElement && typeof taskListElement.render === 'function') {
         taskListElement.render();
     }
+    window.updateSummary();
 };
 
 // ==========================================================================
-// App Logic: Weight Tracker
-// ==========================================================================
-window.renderWeight = function() {
-    const displayArea = document.getElementById('weight-display-area');
-    const statusBadge = document.getElementById('weight-status');
-    
-    if (!displayArea || !statusBadge) return;
-
-    if (MOCK_DATA.weight) {
-        statusBadge.textContent = '기록 완료';
-        statusBadge.className = 'status-badge success';
-        displayArea.innerHTML = `
-            <div class="weight-recorded">
-                ${MOCK_DATA.weight} <span>kg</span>
-                <button onclick="window.editWeight()" class="icon-button" style="margin-left: auto; width: 32px; height: 32px;" title="수정">
-                    <span class="material-icons-round" style="font-size: 1.2rem;">edit</span>
-                </button>
-            </div>
-        `;
-    } else {
-        statusBadge.textContent = '미기록';
-        statusBadge.className = 'status-badge'; // default grey/muted style or fallback
-        displayArea.innerHTML = `
-            <div class="add-weight-form">
-                <input type="number" step="0.1" id="daily-weight-input" class="task-input" placeholder="00.0" style="width: 120px; font-size: 1.5rem; text-align: center; font-weight: 700;">
-                <span style="font-size: 1.2rem; font-weight: 600; color: var(--color-text-muted);">kg</span>
-                <button onclick="window.recordWeight()" class="primary-button" style="padding: 8px 16px; margin-left: var(--space-md);">기록</button>
-            </div>
-        `;
-        
-        const input = document.getElementById('daily-weight-input');
-        if (input) {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') window.recordWeight();
-            });
-            input.focus();
-        }
-    }
-};
-
-window.recordWeight = function() {
-    const input = document.getElementById('daily-weight-input');
-    if (input && input.value.trim() !== '') {
-        // Simple validation to ensure it's a number
-        const val = parseFloat(input.value);
-        if (!isNaN(val) && val > 0) {
-            MOCK_DATA.weight = val.toFixed(1);
-            window.renderWeight();
-        }
-    }
-};
-
-window.editWeight = function() {
-    MOCK_DATA.weight = null;
-    window.renderWeight();
-};
-
-// ==========================================================================
-// Web Component: <summary-widget> (Placeholder for now)
+// Web Component: <summary-widget>
 // ==========================================================================
 class SummaryWidget extends HTMLElement {
     constructor() {
@@ -88,23 +50,255 @@ class SummaryWidget extends HTMLElement {
     }
 
     render() {
+        // Calculate Diet Progress
+        const dietTasks = [...MOCK_DATA.breakfast, ...MOCK_DATA.lunch, ...MOCK_DATA.dinner];
+        const totalDiet = dietTasks.length;
+        const completedDiet = dietTasks.filter(t => t.completed).length;
+        const dietPercent = totalDiet === 0 ? 0 : Math.round((completedDiet / totalDiet) * 100);
+
+        // Calculate Exercise Progress
+        const exerciseTasks = MOCK_DATA.exercise;
+        const totalExercise = exerciseTasks.length;
+        const completedExercise = exerciseTasks.filter(t => t.completed).length;
+        const exercisePercent = totalExercise === 0 ? 0 : Math.round((completedExercise / totalExercise) * 100);
+
+        let weightHtml = '';
+        if (MOCK_DATA.weight) {
+            weightHtml = `
+                <div class="weight-recorded">
+                    <span class="value highlight">${MOCK_DATA.weight}</span> <span class="unit">kg</span>
+                    <button onclick="document.querySelector('summary-widget').editWeight()" class="icon-btn" title="수정">
+                        <span class="material-icons-round">edit</span>
+                    </button>
+                </div>
+            `;
+        } else {
+            weightHtml = `
+                <div class="add-weight-form">
+                    <input type="number" step="0.1" id="summary-weight-input" placeholder="00.0">
+                    <span class="unit">kg</span>
+                    <button onclick="document.querySelector('summary-widget').recordWeight()" class="btn">기록</button>
+                </div>
+            `;
+        }
+
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
+                    display: block;
+                    background-color: var(--color-bg-card, #fff);
+                    border-radius: var(--radius-md, 16px);
+                    padding: var(--space-lg, 24px);
+                    box-shadow: var(--shadow-soft);
+                }
+                .summary-container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    gap: var(--space-lg);
+                }
+                .summary-item {
+                    display: flex;
+                    flex-direction: column;
+                    padding-right: var(--space-lg);
+                    border-right: 1px dashed rgba(0,0,0,0.1);
+                }
+                .summary-item:last-child {
+                    border-right: none;
+                    padding-right: 0;
+                }
+                .label {
+                    font-size: 0.9rem;
+                    color: var(--color-text-muted);
+                    font-weight: 600;
+                    margin-bottom: 12px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .progress-container {
+                    width: 100%;
+                }
+                .progress-header {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.85rem;
+                    color: var(--color-text-main);
+                    margin-bottom: 8px;
+                    font-weight: 700;
+                }
+                .progress-bar {
+                    width: 100%;
+                    height: 10px;
+                    background-color: var(--color-bg-main);
+                    border-radius: var(--radius-pill);
+                    overflow: hidden;
+                }
+                .progress-fill {
+                    height: 100%;
+                    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+                    border-radius: var(--radius-pill);
+                    transition: width 0.5s ease-out;
+                }
+                
+                /* Weight Styles */
+                .weight-recorded {
+                    display: flex;
+                    align-items: baseline;
+                    gap: 8px;
+                }
+                .value {
+                    font-size: 2rem;
+                    font-weight: 800;
+                    color: var(--color-text-main);
+                    line-height: 1;
+                }
+                .value.highlight {
+                    color: var(--color-primary);
+                }
+                .unit {
+                    font-size: 1rem;
+                    color: var(--color-text-muted);
+                    font-weight: 600;
+                }
+                .icon-btn {
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    color: var(--color-text-muted);
+                    padding: 4px;
+                    border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background-color: var(--color-bg-card, #fff);
-                    border-radius: var(--radius-md, 16px);
-                    padding: var(--space-xl, 32px);
-                    box-shadow: var(--shadow-soft);
-                    color: var(--color-text-muted);
-                    font-weight: 500;
-                    border: 2px dashed rgba(0,0,0,0.05);
+                    margin-left: auto;
+                    transition: color 0.2s;
+                }
+                .icon-btn:hover {
+                    color: var(--color-primary);
+                    background-color: rgba(0,0,0,0.02);
+                }
+                .add-weight-form {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .add-weight-form input {
+                    width: 80px;
+                    font-size: 1.2rem;
+                    text-align: center;
+                    font-weight: 700;
+                    border: 1px solid rgba(0,0,0,0.1);
+                    border-radius: 8px;
+                    padding: 6px;
+                    outline: none;
+                    font-family: inherit;
+                    color: var(--color-text-main);
+                }
+                .add-weight-form input:focus {
+                    border-color: var(--color-primary);
+                }
+                .btn {
+                    background-color: var(--color-primary);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    padding: 6px 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-family: inherit;
+                }
+                .btn:hover {
+                    background-color: var(--color-primary-dark);
+                }
+                .material-icons-round {
+                    font-family: 'Material Icons Round';
+                    font-weight: normal;
+                    font-style: normal;
+                    font-size: 20px;
+                    display: inline-block;
+                    line-height: 1;
+                    text-transform: none;
+                    letter-spacing: normal;
+                    word-wrap: normal;
+                    white-space: nowrap;
+                    direction: ltr;
+                }
+
+                @media (max-width: 768px) {
+                    .summary-container {
+                        grid-template-columns: 1fr;
+                        gap: var(--space-lg);
+                    }
+                    .summary-item {
+                        border-right: none;
+                        padding-right: 0;
+                        border-bottom: 1px dashed rgba(0,0,0,0.1);
+                        padding-bottom: var(--space-md);
+                    }
+                    .summary-item:last-child {
+                        border-bottom: none;
+                        padding-bottom: 0;
+                    }
                 }
             </style>
-            <div>종합 대시보드 (업데이트 예정)</div>
+            
+            <div class="summary-container">
+                <div class="summary-item">
+                    <div class="label"><span class="material-icons-round" style="color:#2ecc71; font-size:18px;">restaurant</span> 식단 달성률</div>
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span>${completedDiet} / ${totalDiet} 완료</span>
+                            <span>${dietPercent}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${dietPercent}%; background: linear-gradient(90deg, #2ecc71, #27ae60);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="label"><span class="material-icons-round" style="color:#f1c40f; font-size:18px;">fitness_center</span> 운동 달성률</div>
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span>${completedExercise} / ${totalExercise} 완료</span>
+                            <span>${exercisePercent}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${exercisePercent}%; background: linear-gradient(90deg, #f1c40f, #f39c12);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="label"><span class="material-icons-round" style="color:var(--color-primary); font-size:18px;">monitor_weight</span> 현재 체중</div>
+                    ${weightHtml}
+                </div>
+            </div>
         `;
+
+        const input = this.shadowRoot.getElementById('summary-weight-input');
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.recordWeight();
+            });
+            // Don't auto-focus to prevent page jumping on every render
+        }
+    }
+
+    recordWeight() {
+        const input = this.shadowRoot.getElementById('summary-weight-input');
+        if (input && input.value.trim() !== '') {
+            const val = parseFloat(input.value);
+            if (!isNaN(val) && val > 0) {
+                MOCK_DATA.weight = val.toFixed(1);
+                this.render();
+            }
+        }
+    }
+
+    editWeight() {
+        MOCK_DATA.weight = null;
+        this.render();
     }
 }
 customElements.define('summary-widget', SummaryWidget);
@@ -178,7 +372,7 @@ class TaskList extends HTMLElement {
                 }
                 .task-content {
                     flex: 1;
-                    min-width: 0; /* allows text truncation if needed */
+                    min-width: 0;
                 }
                 .task-title {
                     font-weight: 600;
@@ -237,7 +431,7 @@ class TaskList extends HTMLElement {
             <ul class="task-list">
                 ${tasks.map(task => `
                     <li class="task-item ${task.completed ? 'completed' : ''}">
-                        <div class="task-checkbox" onclick="this.closest('.task-item').classList.toggle('completed')"></div>
+                        <div class="task-checkbox" onclick="window.toggleTask('${listType}', ${task.id})"></div>
                         <div class="task-content">
                             <div class="task-title">${task.title}</div>
                             ${task.detail ? `<div class="task-detail">${task.detail}</div>` : ''}
@@ -262,7 +456,6 @@ window.addNewTask = function(mealType) {
     const title = titleInput.value.trim();
 
     if (title) {
-        // Combined ID search across all diet keys to be safe
         const allTasks = [...MOCK_DATA.breakfast, ...MOCK_DATA.lunch, ...MOCK_DATA.dinner, ...MOCK_DATA.exercise];
         const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
         
@@ -276,6 +469,7 @@ window.addNewTask = function(mealType) {
         if (taskListElement && typeof taskListElement.render === 'function') {
             taskListElement.render();
         }
+        window.updateSummary();
 
         titleInput.value = '';
     }
@@ -314,6 +508,7 @@ window.addExerciseTask = function() {
         if (taskListElement && typeof taskListElement.render === 'function') {
             taskListElement.render();
         }
+        window.updateSummary();
 
         titleInput.value = '';
         weightInput.value = '';
@@ -334,9 +529,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
         dateElement.textContent = now.toLocaleDateString('ko-KR', options);
     }
-
-    // Initialize Weight Tracker
-    window.renderWeight();
 
     // Set up Enter key listeners for all inputs
     const inputs = document.querySelectorAll('.task-input');
