@@ -1,14 +1,85 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitMate - 친구와 함께하는 다이어트 관리</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Main JS (ES Modules) -->
+    <script type="module" src="main.js"></script>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+    <div class="app-layout">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="logo">FitMate</h1>
+                <div class="user-profile">
+                    <span class="material-icons-round">account_circle</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <main class="dashboard-container">
+            <!-- Greeting -->
+            <section class="greeting-section">
+                <h2>오늘도 화이팅! 🚀</h2>
+                <p>매니저 '지민'님이 오늘의 일정을 등록했습니다.</p>
+            </section>
+
+            <!-- Summary Widget (Web Component) -->
+            <section class="summary-section">
+                <summary-widget></summary-widget>
+            </section>
+
+            <!-- Diet Plan Section -->
+            <section class="plan-section diet-section">
+                <div class="section-header">
+                    <h3>오늘의 식단 🥗</h3>
+                    <span class="status-badge">매니저 승인됨</span>
+                </div>
+                <!-- Task List Web Component for Diet -->
+                <task-list id="diet-tasks"></task-list>
+            </section>
+
+            <!-- Exercise Plan Section -->
+            <section class="plan-section exercise-section">
+                <div class="section-header">
+                    <h3>오늘의 운동 🏃</h3>
+                    <span class="status-badge">필수 완료</span>
+                </div>
+                <!-- Task List Web Component for Exercise -->
+                <task-list id="exercise-tasks"></task-list>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation (Mobile mostly) -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <span class="material-icons-round">dashboard</span>
+                <span>대시보드</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-icons-round">restaurant_menu</span>
+                <span>식단</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-icons-round">fitness_center</span>
+                <span>운동</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="material-icons-round">insights</span>
+                <span>통계</span>
+            </a>
+        </nav>
+    </div>
 </body>
 </html>
