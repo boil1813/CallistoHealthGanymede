@@ -137,10 +137,7 @@ class SummaryWidget extends HTMLElement {
             <style>
                 :host {
                     display: block;
-                    background-color: var(--color-bg-card, #fff);
-                    border-radius: var(--radius-md, 16px);
-                    padding: var(--space-xl, 32px);
-                    box-shadow: var(--shadow-soft);
+                    /* Host styling relies on the parent .card class in index.html */
                 }
                 .section-header {
                     display: flex;
