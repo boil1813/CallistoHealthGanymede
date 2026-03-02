@@ -20,6 +20,7 @@ const userDocRef = doc(db, "data", USER_DOC_ID);
 // Initialize Data structure
 let MOCK_DATA = {
     weight: null,
+    targetWeight: null, // Added target weight
     breakfast: [],
     lunch: [],
     dinner: [],
@@ -114,7 +115,42 @@ class SummaryWidget extends HTMLElement {
         const exercisePercent = totalExercise === 0 ? 0 : Math.round((completedExercise / totalExercise) * 100);
 
         let weightHtml = '';
+        
+        // Target Weight HTML
+        let targetWeightHtml = '';
+        if (MOCK_DATA.targetWeight) {
+            targetWeightHtml = `
+                <div class="target-weight-display">
+                    목표: <strong>${MOCK_DATA.targetWeight}kg</strong>
+                    <button onclick="document.querySelector('summary-widget').editTargetWeight()" class="icon-btn mini" title="목표 수정">
+                        <span class="material-icons-round" style="font-size: 14px;">edit</span>
+                    </button>
+                </div>
+            `;
+        } else {
+            targetWeightHtml = `
+                <div class="add-weight-form mini" style="margin-top: 4px;">
+                    <span style="font-size:0.8rem; color:var(--color-text-muted);">목표:</span>
+                    <input type="number" step="0.1" id="summary-target-weight-input" placeholder="00.0" style="width: 50px; font-size:0.85rem; padding: 2px 4px;">
+                    <button onclick="document.querySelector('summary-widget').recordTargetWeight()" class="btn mini">저장</button>
+                </div>
+            `;
+        }
+
+        // Current Weight HTML
         if (MOCK_DATA.weight) {
+            let diffHtml = '';
+            if (MOCK_DATA.targetWeight) {
+                const diff = (parseFloat(MOCK_DATA.weight) - parseFloat(MOCK_DATA.targetWeight)).toFixed(1);
+                if (diff > 0) {
+                    diffHtml = `<div class="weight-diff">목표까지 <strong>-${diff}kg</strong></div>`;
+                } else if (diff < 0) {
+                    diffHtml = `<div class="weight-diff success">목표 초과 달성! (+${Math.abs(diff)}kg)</div>`;
+                } else {
+                    diffHtml = `<div class="weight-diff success">목표 달성! 🎉</div>`;
+                }
+            }
+
             weightHtml = `
                 <div class="weight-recorded">
                     <span class="value highlight">${MOCK_DATA.weight}</span> <span class="unit">kg</span>
@@ -122,14 +158,17 @@ class SummaryWidget extends HTMLElement {
                         <span class="material-icons-round">edit</span>
                     </button>
                 </div>
+                ${targetWeightHtml}
+                ${diffHtml}
             `;
         } else {
             weightHtml = `
-                <div class="add-weight-form">
+                <div class="add-weight-form" style="margin-bottom: 8px;">
                     <input type="number" step="0.1" id="summary-weight-input" placeholder="00.0">
                     <span class="unit">kg</span>
                     <button onclick="document.querySelector('summary-widget').recordWeight()" class="btn">기록</button>
                 </div>
+                ${targetWeightHtml}
             `;
         }
 
@@ -162,7 +201,7 @@ class SummaryWidget extends HTMLElement {
                 .summary-item {
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
+                    justify-content: flex-start;
                     min-height: 120px;
                 }
                 .label {
@@ -176,6 +215,7 @@ class SummaryWidget extends HTMLElement {
                 }
                 .progress-container {
                     width: 100%;
+                    margin-top: auto;
                 }
                 .progress-header {
                     display: flex;
@@ -229,6 +269,10 @@ class SummaryWidget extends HTMLElement {
                     margin-left: auto;
                     transition: color 0.2s;
                 }
+                .icon-btn.mini {
+                    padding: 2px;
+                    margin-left: 4px;
+                }
                 .icon-btn:hover {
                     color: var(--color-primary);
                     background-color: rgba(0,0,0,0.02);
@@ -264,8 +308,38 @@ class SummaryWidget extends HTMLElement {
                     cursor: pointer;
                     font-family: inherit;
                 }
+                .btn.mini {
+                    padding: 4px 8px;
+                    font-size: 0.8rem;
+                    border-radius: 4px;
+                }
                 .btn:hover {
                     background-color: var(--color-primary-dark);
+                }
+                .target-weight-display {
+                    font-size: 0.85rem;
+                    color: var(--color-text-muted);
+                    display: flex;
+                    align-items: center;
+                    margin-top: 4px;
+                }
+                .target-weight-display strong {
+                    color: var(--color-text-main);
+                    margin-left: 4px;
+                }
+                .weight-diff {
+                    font-size: 0.85rem;
+                    color: var(--color-primary);
+                    background-color: rgba(255, 107, 107, 0.1);
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    display: inline-block;
+                    margin-top: 8px;
+                    font-weight: 600;
+                }
+                .weight-diff.success {
+                    color: var(--color-success);
+                    background-color: rgba(46, 204, 113, 0.1);
                 }
                 .material-icons-round {
                     font-family: 'Material Icons Round';
@@ -334,6 +408,13 @@ class SummaryWidget extends HTMLElement {
                 if (e.key === 'Enter') this.recordWeight();
             });
         }
+        
+        const targetInput = this.shadowRoot.getElementById('summary-target-weight-input');
+        if (targetInput) {
+            targetInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.recordTargetWeight();
+            });
+        }
     }
 
     recordWeight() {
@@ -350,6 +431,24 @@ class SummaryWidget extends HTMLElement {
 
     editWeight() {
         MOCK_DATA.weight = null;
+        this.render();
+        window.saveData();
+    }
+    
+    recordTargetWeight() {
+        const input = this.shadowRoot.getElementById('summary-target-weight-input');
+        if (input && input.value.trim() !== '') {
+            const val = parseFloat(input.value);
+            if (!isNaN(val) && val > 0) {
+                MOCK_DATA.targetWeight = val.toFixed(1);
+                this.render();
+                window.saveData();
+            }
+        }
+    }
+
+    editTargetWeight() {
+        MOCK_DATA.targetWeight = null;
         this.render();
         window.saveData();
     }
