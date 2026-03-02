@@ -340,11 +340,13 @@ class TaskList extends HTMLElement {
                     border-radius: var(--radius-md, 16px);
                     box-shadow: var(--shadow-soft);
                     overflow: hidden;
+                    border: 2px solid cyan; /* DEBUG: TaskList host boundary */
                 }
                 .task-list {
                     list-style: none;
                     margin: 0;
                     padding: 0;
+                    border: 2px dashed magenta; /* DEBUG: TaskList container boundary */
                 }
                 .task-item {
                     display: flex;
@@ -352,6 +354,7 @@ class TaskList extends HTMLElement {
                     padding: var(--space-md) var(--space-lg);
                     border-bottom: 1px solid var(--color-bg-main);
                     transition: background-color 0.2s ease;
+                    border: 1px solid brown; /* DEBUG: Single task item boundary */
                 }
                 .task-item:last-child {
                     border-bottom: none;

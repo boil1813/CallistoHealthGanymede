@@ -394,6 +394,36 @@ body {
     padding: var(--space-xl);
     box-shadow: var(--shadow-soft);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
+    border: 2px solid red; /* DEBUG: Card boundary */
+}
+
+.plan-section .section-header {
+    border: 2px solid blue; /* DEBUG: Header boundary */
+    padding: 8px;
+    margin-bottom: var(--space-md);
+}
+
+.meal-group {
+    margin-bottom: var(--space-lg);
+    border: 2px solid green; /* DEBUG: Meal group boundary */
+    padding: 8px;
+}
+
+.add-task-form.mini {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    flex: 1;
+    max-width: 250px;
+    border: 2px dashed orange; /* DEBUG: Mini form boundary */
+}
+
+.exercise-details-inputs {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    border: 2px dashed orange; /* DEBUG: Exercise inputs boundary */
+    padding: 4px;
 }
 
 .card:hover {
