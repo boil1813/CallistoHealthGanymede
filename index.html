@@ -84,13 +84,41 @@
                             <span class="status-badge success">오늘의 기록</span>
                         </div>
                         
-                        <div class="add-task-form">
-                            <input type="text" id="new-diet-title" class="task-input" placeholder="메뉴 (예: 닭가슴살 샐러드)">
-                            <button id="add-diet-btn" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                        <!-- 아침 -->
+                        <div class="meal-group">
+                            <div class="meal-header">
+                                <h4>아침 🍳</h4>
+                                <div class="add-task-form mini">
+                                    <input type="text" id="new-breakfast-title" class="task-input" placeholder="아침 메뉴 추가">
+                                    <button onclick="window.addNewTask('breakfast')" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                </div>
+                            </div>
+                            <task-list id="breakfast-tasks"></task-list>
                         </div>
 
-                        <!-- Task List Web Component for Diet -->
-                        <task-list id="diet-tasks"></task-list>
+                        <!-- 점심 -->
+                        <div class="meal-group">
+                            <div class="meal-header">
+                                <h4>점심 ☀️</h4>
+                                <div class="add-task-form mini">
+                                    <input type="text" id="new-lunch-title" class="task-input" placeholder="점심 메뉴 추가">
+                                    <button onclick="window.addNewTask('lunch')" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                </div>
+                            </div>
+                            <task-list id="lunch-tasks"></task-list>
+                        </div>
+
+                        <!-- 저녁 -->
+                        <div class="meal-group">
+                            <div class="meal-header">
+                                <h4>저녁 🌙</h4>
+                                <div class="add-task-form mini">
+                                    <input type="text" id="new-dinner-title" class="task-input" placeholder="저녁 메뉴 추가">
+                                    <button onclick="window.addNewTask('dinner')" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                                </div>
+                            </div>
+                            <task-list id="dinner-tasks"></task-list>
+                        </div>
                     </section>
 
                     <!-- Exercise Plan Section -->

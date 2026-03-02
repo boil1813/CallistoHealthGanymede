@@ -7,7 +7,9 @@ const MOCK_DATA = {
         currentWeight: 72.5,
         targetWeight: 68.0
     },
-    diet: [], // Start with empty diet list
+    breakfast: [],
+    lunch: [],
+    dinner: [],
     exercise: [
         { id: 5, title: '유산소: 가볍게 런닝', detail: '30분 / 250 kcal 소모', completed: true },
         { id: 6, title: '근력: 스쿼트 & 런지', detail: '4세트', completed: false },
@@ -157,7 +159,7 @@ class TaskList extends HTMLElement {
     }
 
     render() {
-        const listType = this.getAttribute('id') === 'diet-tasks' ? 'diet' : 'exercise';
+        const listType = this.getAttribute('id').replace('-tasks', '');
         const tasks = MOCK_DATA[listType] || [];
 
         this.shadowRoot.innerHTML = `
@@ -217,8 +219,8 @@ class TaskList extends HTMLElement {
                 .task-title {
                     font-weight: 600;
                     color: var(--color-text-main);
-                    margin-bottom: 4px;
-                    font-size: 1rem;
+                    margin-bottom: 0px;
+                    font-size: 0.95rem;
                     transition: color 0.2s ease;
                 }
                 .task-item.completed .task-title {
@@ -226,7 +228,7 @@ class TaskList extends HTMLElement {
                     color: var(--color-text-muted);
                 }
                 .task-detail {
-                    font-size: 0.85rem;
+                    font-size: 0.8rem;
                     color: var(--color-text-muted);
                 }
                 .delete-btn {
@@ -250,7 +252,7 @@ class TaskList extends HTMLElement {
                     font-family: 'Material Icons Round';
                     font-weight: normal;
                     font-style: normal;
-                    font-size: 20px;
+                    font-size: 18px;
                     display: inline-block;
                     line-height: 1;
                     text-transform: none;
@@ -260,14 +262,14 @@ class TaskList extends HTMLElement {
                     direction: ltr;
                 }
                 .empty-state {
-                    padding: var(--space-lg);
+                    padding: var(--space-md);
                     text-align: center;
                     color: var(--color-text-muted);
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
                 }
             </style>
             
-            ${tasks.length === 0 ? '<div class="empty-state">등록된 항목이 없습니다.</div>' : `
+            ${tasks.length === 0 ? '<div class="empty-state">기록이 없습니다.</div>' : `
             <ul class="task-list">
                 ${tasks.map(task => `
                     <li class="task-item ${task.completed ? 'completed' : ''}">
@@ -289,7 +291,34 @@ class TaskList extends HTMLElement {
 customElements.define('task-list', TaskList);
 
 // ==========================================================================
-// App Logic: Add Diet
+// App Logic: Global Add Function
+// ==========================================================================
+window.addNewTask = function(mealType) {
+    const titleInput = document.getElementById(`new-${mealType}-title`);
+    const title = titleInput.value.trim();
+
+    if (title) {
+        // Combined ID search across all diet keys to be safe
+        const allTasks = [...MOCK_DATA.breakfast, ...MOCK_DATA.lunch, ...MOCK_DATA.dinner, ...MOCK_DATA.exercise];
+        const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
+        
+        MOCK_DATA[mealType].push({
+            id: newId,
+            title: title,
+            completed: false
+        });
+        
+        const taskListElement = document.getElementById(`${mealType}-tasks`);
+        if (taskListElement && typeof taskListElement.render === 'function') {
+            taskListElement.render();
+        }
+
+        titleInput.value = '';
+    }
+};
+
+// ==========================================================================
+// Initial Setup
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     // Set Current Date
@@ -300,35 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
         dateElement.textContent = now.toLocaleDateString('ko-KR', options);
     }
 
-    const addDietBtn = document.getElementById('add-diet-btn');
-    const titleInput = document.getElementById('new-diet-title');
-    const dietTaskList = document.getElementById('diet-tasks');
-
-    if (addDietBtn) {
-        addDietBtn.addEventListener('click', () => {
-            const title = titleInput.value.trim();
-
-            if (title) {
-                const newId = MOCK_DATA.diet.length > 0 ? Math.max(...MOCK_DATA.diet.map(d => d.id)) + 1 : 1;
-                MOCK_DATA.diet.push({
-                    id: newId,
-                    title: title,
-                    completed: false
-                });
-                
-                // Re-render the task list component
-                if (dietTaskList && typeof dietTaskList.render === 'function') {
-                    dietTaskList.render();
-                }
-
-                // Clear input
-                titleInput.value = '';
+    // Set up Enter key listeners for all inputs
+    const inputs = document.querySelectorAll('.task-input');
+    inputs.forEach(input => {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const mealType = input.id.replace('new-', '').replace('-title', '');
+                window.addNewTask(mealType);
             }
         });
-        
-        // Handle Enter key
-        titleInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addDietBtn.click();
-        });
-    }
+    });
 });

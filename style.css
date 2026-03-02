@@ -294,6 +294,36 @@ body {
     border-bottom: 1px dashed rgba(0,0,0,0.05);
 }
 
+.add-task-form.mini {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    flex: 1;
+    max-width: 250px;
+}
+
+.meal-group {
+    margin-bottom: var(--space-lg);
+}
+
+.meal-group:last-child {
+    margin-bottom: 0;
+}
+
+.meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+    padding-left: var(--space-xs);
+}
+
+.meal-header h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+}
+
 .task-input {
     flex: 2;
     border: 1px solid rgba(0,0,0,0.1);
@@ -301,10 +331,14 @@ body {
     padding: 8px 12px;
     border-radius: var(--radius-sm);
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--color-text-main);
     outline: none;
     transition: border-color 0.2s ease;
+}
+
+.add-task-form.mini .task-input {
+    padding: 6px 10px;
 }
 
 .task-input:focus {
@@ -319,6 +353,11 @@ body {
     background-color: var(--color-primary);
     color: white;
     border-radius: var(--radius-sm);
+}
+
+.add-task-form.mini .add-btn {
+    width: 32px;
+    height: 32px;
 }
 
 .add-btn:hover {
