@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitMate - 친구와 함께하는 다이어트 관리</title>
+    <title>Callisto Health - 친구와 함께하는 다이어트 관리</title>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,70 +16,104 @@
     <script type="module" src="main.js"></script>
 </head>
 <body>
-    <div class="app-layout">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <h1 class="logo">FitMate</h1>
-                <div class="user-profile">
-                    <span class="material-icons-round">account_circle</span>
-                </div>
+    <div class="web-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">Callisto</h1>
+                <span class="logo-sub">Health</span>
             </div>
-        </header>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <span class="material-icons-round">dashboard</span>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">restaurant_menu</span>
+                    <span>식단 관리</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">fitness_center</span>
+                    <span>운동 루틴</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">insights</span>
+                    <span>통계 및 진행상황</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">settings</span>
+                    <span>설정</span>
+                </a>
+            </div>
+        </aside>
 
-        <!-- Main Dashboard Content -->
-        <main class="dashboard-container">
-            <!-- Greeting -->
-            <section class="greeting-section">
-                <h2>오늘도 화이팅! 🚀</h2>
-                <p>매니저 '지민'님이 오늘의 일정을 등록했습니다.</p>
-            </section>
-
-            <!-- Summary Widget (Web Component) -->
-            <section class="summary-section">
-                <summary-widget></summary-widget>
-            </section>
-
-            <!-- Diet Plan Section -->
-            <section class="plan-section diet-section">
-                <div class="section-header">
-                    <h3>오늘의 식단 🥗</h3>
-                    <span class="status-badge">매니저 승인됨</span>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-bar">
+                    <span class="material-icons-round">search</span>
+                    <input type="text" placeholder="검색...">
                 </div>
-                <!-- Task List Web Component for Diet -->
-                <task-list id="diet-tasks"></task-list>
-            </section>
-
-            <!-- Exercise Plan Section -->
-            <section class="plan-section exercise-section">
-                <div class="section-header">
-                    <h3>오늘의 운동 🏃</h3>
-                    <span class="status-badge">필수 완료</span>
+                <div class="header-actions">
+                    <button class="icon-button"><span class="material-icons-round">notifications</span></button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=User&background=ff6b6b&color=fff&rounded=true" alt="User Profile" class="avatar">
+                        <span class="user-name">사용자 님</span>
+                        <span class="material-icons-round expand-icon">expand_more</span>
+                    </div>
                 </div>
-                <!-- Task List Web Component for Exercise -->
-                <task-list id="exercise-tasks"></task-list>
-            </section>
-        </main>
+            </header>
 
-        <!-- Bottom Navigation (Mobile mostly) -->
-        <nav class="bottom-nav">
-            <a href="#" class="nav-item active">
-                <span class="material-icons-round">dashboard</span>
-                <span>대시보드</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-round">restaurant_menu</span>
-                <span>식단</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-round">fitness_center</span>
-                <span>운동</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-round">insights</span>
-                <span>통계</span>
-            </a>
-        </nav>
+            <!-- Dashboard Grid -->
+            <main class="dashboard-grid">
+                <!-- Greeting -->
+                <section class="greeting-section">
+                    <div>
+                        <h2>오늘도 화이팅하세요! 🚀</h2>
+                        <p>매니저 <strong>'지민'</strong>님이 오늘의 일정과 식단을 업데이트했습니다.</p>
+                    </div>
+                    <button class="primary-button">
+                        <span class="material-icons-round">add</span> 새 기록 추가
+                    </button>
+                </section>
+
+                <!-- Summary Widget (Web Component) -->
+                <section class="summary-section">
+                    <summary-widget></summary-widget>
+                </section>
+
+                <div class="plan-columns">
+                    <!-- Diet Plan Section -->
+                    <section class="plan-section diet-section card">
+                        <div class="section-header">
+                            <div>
+                                <h3>오늘의 식단 🥗</h3>
+                                <p class="section-subtitle">권장 칼로리: 1800kcal</p>
+                            </div>
+                            <span class="status-badge success">매니저 승인됨</span>
+                        </div>
+                        <!-- Task List Web Component for Diet -->
+                        <task-list id="diet-tasks"></task-list>
+                    </section>
+
+                    <!-- Exercise Plan Section -->
+                    <section class="plan-section exercise-section card">
+                        <div class="section-header">
+                            <div>
+                                <h3>오늘의 운동 🏃</h3>
+                                <p class="section-subtitle">목표 소모량: 400kcal</p>
+                            </div>
+                            <span class="status-badge warning">필수 완료</span>
+                        </div>
+                        <!-- Task List Web Component for Exercise -->
+                        <task-list id="exercise-tasks"></task-list>
+                    </section>
+                </div>
+            </main>
+        </div>
     </div>
 </body>
 </html>
