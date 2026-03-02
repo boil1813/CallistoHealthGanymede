@@ -99,6 +99,7 @@ class SummaryWidget extends HTMLElement {
                 .summary-item {
                     display: flex;
                     flex-direction: column;
+                    justify-content: space-between;
                     padding-right: var(--space-lg);
                     border-right: 1px dashed rgba(0,0,0,0.1);
                 }
