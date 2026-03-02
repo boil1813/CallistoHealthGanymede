@@ -129,14 +129,17 @@ function renderList(type) {
 window.addExerciseToDict = function(type) {
     const nameInput = document.getElementById(`new-${type}-name`);
     const targetInput = document.getElementById(`new-${type}-target`);
-    const imageInput = document.getElementById(`new-${type}-image`);
     
     const name = nameInput.value.trim();
     const target = targetInput.value.trim() || '미지정';
-    const image = imageInput.value.trim();
 
     if (name) {
         const newId = type.charAt(0) + Date.now().toString(36); // Generate pseudo-unique ID
+        
+        // Auto-generate a related Unsplash image URL based on the exercise name
+        // We use keywords like 'workout', 'fitness' to ensure relevant results
+        const encodedName = encodeURIComponent(name + ' workout fitness');
+        const autoImage = `https://source.unsplash.com/200x200/?${encodedName}`;
         
         if (!MOCK_DATA.exerciseDictionary) MOCK_DATA.exerciseDictionary = {};
         if (!MOCK_DATA.exerciseDictionary[type]) MOCK_DATA.exerciseDictionary[type] = [];
@@ -145,14 +148,13 @@ window.addExerciseToDict = function(type) {
             id: newId,
             name: name,
             target: target,
-            image: image
+            image: autoImage
         });
         
         saveData(); // onSnapshot will trigger re-render
         
         nameInput.value = '';
         targetInput.value = '';
-        imageInput.value = '';
         nameInput.focus();
     }
 };
