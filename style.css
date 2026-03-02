@@ -168,7 +168,7 @@ body {
     display: flex;
     justify-content: flex-end; /* Align the date to the right */
     align-items: center;
-    padding: var(--space-md) var(--space-xl);
+    padding: var(--space-md) 60px; /* Matched 60px padding */
     background-color: transparent;
 }
 
@@ -192,11 +192,11 @@ body {
 
 /* Dashboard Grid */
 .dashboard-grid {
-    padding: var(--space-xl);
+    padding: var(--space-xl) 60px; /* Increased horizontal padding from 32px to 60px */
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
-    max-width: 1200px;
+    gap: 40px; /* Increased gap between sections */
+    max-width: 1400px; /* Slightly wider max-width to allow more breathing room */
     margin: 0 auto;
     width: 100%;
 }
@@ -206,6 +206,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    margin-bottom: var(--space-md);
 }
 
 .greeting-section h2 {
