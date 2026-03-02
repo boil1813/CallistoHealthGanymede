@@ -1,6 +1,24 @@
-// Initialize Data from LocalStorage or use defaults
-const LOCAL_STORAGE_KEY = 'callisto_health_data';
-const defaultData = {
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDQpKkh7gcamN5cqHJ4GKnYtRVFjccVA_w",
+  authDomain: "callistohealth-18aeb.firebaseapp.com",
+  projectId: "callistohealth-18aeb",
+  storageBucket: "callistohealth-18aeb.firebasestorage.app",
+  messagingSenderId: "160546906695",
+  appId: "1:160546906695:web:e56a001490f57e5d7b0762"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const USER_DOC_ID = "main_user_data";
+const userDocRef = doc(db, "data", USER_DOC_ID);
+
+// Initialize Data structure
+let MOCK_DATA = {
     weight: null,
     breakfast: [],
     lunch: [],
@@ -8,12 +26,35 @@ const defaultData = {
     exercise: []
 };
 
-let MOCK_DATA = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || defaultData;
-
-// Function to save data back to LocalStorage
-window.saveData = function() {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(MOCK_DATA));
+// Function to save data to Firebase Firestore
+window.saveData = async function() {
+    try {
+        await setDoc(userDocRef, MOCK_DATA);
+        console.log("Data saved to Firestore");
+    } catch (error) {
+        console.error("Error saving to Firestore:", error);
+    }
 };
+
+// Function to render all UI components based on current MOCK_DATA
+window.renderAll = function() {
+    window.updateSummary();
+    ['breakfast', 'lunch', 'dinner', 'exercise'].forEach(listType => {
+        const el = document.getElementById(`${listType}-tasks`);
+        if (el && typeof el.render === 'function') el.render();
+    });
+};
+
+// Real-time synchronization with Firestore
+onSnapshot(userDocRef, (docSnap) => {
+    if (docSnap.exists()) {
+        MOCK_DATA = docSnap.data();
+        window.renderAll();
+    } else {
+        // First time initialization if document doesn't exist
+        window.saveData();
+    }
+});
 
 window.updateSummary = function() {
     const summaryWidget = document.querySelector('summary-widget');
@@ -31,11 +72,11 @@ window.toggleTask = function(listType, id) {
             taskListElement.render();
         }
         window.updateSummary();
-        window.saveData(); // Save changes
+        window.saveData();
     }
 };
 
-// Global function to handle deleting tasks so it can be called from inline onclick handlers
+// Global function to handle deleting tasks
 window.deleteTask = function(listType, id) {
     MOCK_DATA[listType] = MOCK_DATA[listType].filter(task => task.id !== id);
     const taskListElement = document.getElementById(`${listType}-tasks`);
@@ -43,7 +84,7 @@ window.deleteTask = function(listType, id) {
         taskListElement.render();
     }
     window.updateSummary();
-    window.saveData(); // Save changes
+    window.saveData();
 };
 
 // ==========================================================================
@@ -61,13 +102,13 @@ class SummaryWidget extends HTMLElement {
 
     render() {
         // Calculate Diet Progress
-        const dietTasks = [...MOCK_DATA.breakfast, ...MOCK_DATA.lunch, ...MOCK_DATA.dinner];
+        const dietTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || [])];
         const totalDiet = dietTasks.length;
         const completedDiet = dietTasks.filter(t => t.completed).length;
         const dietPercent = totalDiet === 0 ? 0 : Math.round((completedDiet / totalDiet) * 100);
 
         // Calculate Exercise Progress
-        const exerciseTasks = MOCK_DATA.exercise;
+        const exerciseTasks = MOCK_DATA.exercise || [];
         const totalExercise = exerciseTasks.length;
         const completedExercise = exerciseTasks.filter(t => t.completed).length;
         const exercisePercent = totalExercise === 0 ? 0 : Math.round((completedExercise / totalExercise) * 100);
@@ -98,17 +139,17 @@ class SummaryWidget extends HTMLElement {
                     display: block;
                     background-color: var(--color-bg-card, #fff);
                     border-radius: var(--radius-md, 16px);
-                    padding: var(--space-xl, 32px); /* Match exactly with regular .card */
+                    padding: var(--space-xl, 32px);
                     box-shadow: var(--shadow-soft);
-                    border: 2px solid red; /* DEBUG: Host boundary (should now match regular cards) */
+                    border: 2px solid red; /* DEBUG */
                 }
                 .section-header {
                     display: flex;
                     justify-content: space-between;
-                    align-items: flex-start; /* Match exactly with regular .section-header */
-                    margin-bottom: var(--space-md); /* Match exactly with regular .section-header */
-                    border: 2px solid blue; /* DEBUG: Header boundary */
-                    padding: 8px; /* Match exactly with regular .section-header from style.css */
+                    align-items: center;
+                    margin-bottom: var(--space-lg);
+                    border: 2px solid blue; /* DEBUG */
+                    padding: 8px;
                 }
                 .section-header h3 {
                     font-size: 1.25rem;
@@ -123,14 +164,15 @@ class SummaryWidget extends HTMLElement {
                     background-color: var(--color-bg-main);
                     padding: 24px;
                     border-radius: var(--radius-md);
-                    border: 2px solid green; /* DEBUG: Container boundary */
+                    border: 2px solid green; /* DEBUG */
                 }
                 .summary-item {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
-                    border: 2px dashed purple; /* DEBUG: Item boundary */
-                    padding: 8px; /* added to separate content from border */
+                    border: 2px dashed purple; /* DEBUG */
+                    padding: 8px;
+                    min-height: 120px;
                 }
                 .label {
                     font-size: 0.9rem;
@@ -164,8 +206,6 @@ class SummaryWidget extends HTMLElement {
                     border-radius: var(--radius-pill);
                     transition: width 0.5s ease-out;
                 }
-                
-                /* Weight Styles */
                 .weight-recorded {
                     display: flex;
                     align-items: baseline;
@@ -249,7 +289,6 @@ class SummaryWidget extends HTMLElement {
                     white-space: nowrap;
                     direction: ltr;
                 }
-
                 @media (max-width: 768px) {
                     .summary-container {
                         grid-template-columns: 1fr;
@@ -303,7 +342,6 @@ class SummaryWidget extends HTMLElement {
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') this.recordWeight();
             });
-            // Don't auto-focus to prevent page jumping on every render
         }
     }
 
@@ -314,7 +352,7 @@ class SummaryWidget extends HTMLElement {
             if (!isNaN(val) && val > 0) {
                 MOCK_DATA.weight = val.toFixed(1);
                 this.render();
-                window.saveData(); // Save changes
+                window.saveData();
             }
         }
     }
@@ -322,7 +360,7 @@ class SummaryWidget extends HTMLElement {
     editWeight() {
         MOCK_DATA.weight = null;
         this.render();
-        window.saveData(); // Save changes
+        window.saveData();
     }
 }
 customElements.define('summary-widget', SummaryWidget);
@@ -352,13 +390,13 @@ class TaskList extends HTMLElement {
                     border-radius: var(--radius-md, 16px);
                     box-shadow: var(--shadow-soft);
                     overflow: hidden;
-                    border: 2px solid cyan; /* DEBUG: TaskList host boundary */
+                    border: 2px solid cyan; /* DEBUG */
                 }
                 .task-list {
                     list-style: none;
                     margin: 0;
                     padding: 0;
-                    border: 2px dashed magenta; /* DEBUG: TaskList container boundary */
+                    border: 2px dashed magenta; /* DEBUG */
                 }
                 .task-item {
                     display: flex;
@@ -366,7 +404,7 @@ class TaskList extends HTMLElement {
                     padding: var(--space-md) var(--space-lg);
                     border-bottom: 1px solid var(--color-bg-main);
                     transition: background-color 0.2s ease;
-                    border: 1px solid brown; /* DEBUG: Single task item boundary */
+                    border: 1px solid brown; /* DEBUG */
                 }
                 .task-item:last-child {
                     border-bottom: none;
@@ -483,22 +521,18 @@ window.addNewTask = function(mealType) {
     const title = titleInput.value.trim();
 
     if (title) {
-        const allTasks = [...MOCK_DATA.breakfast, ...MOCK_DATA.lunch, ...MOCK_DATA.dinner, ...MOCK_DATA.exercise];
+        const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.exercise || [])];
         const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
         
+        if (!MOCK_DATA[mealType]) MOCK_DATA[mealType] = [];
         MOCK_DATA[mealType].push({
             id: newId,
             title: title,
             completed: false
         });
         
-        const taskListElement = document.getElementById(`${mealType}-tasks`);
-        if (taskListElement && typeof taskListElement.render === 'function') {
-            taskListElement.render();
-        }
-        window.updateSummary();
-        window.saveData(); // Save changes
-
+        window.renderAll();
+        window.saveData();
         titleInput.value = '';
     }
 };
@@ -522,9 +556,10 @@ window.addExerciseTask = function() {
         
         const detail = detailStr.join(' x ');
 
-        const allTasks = [...MOCK_DATA.breakfast, ...MOCK_DATA.lunch, ...MOCK_DATA.dinner, ...MOCK_DATA.exercise];
+        const allTasks = [...(MOCK_DATA.breakfast || []), ...(MOCK_DATA.lunch || []), ...(MOCK_DATA.dinner || []), ...(MOCK_DATA.exercise || [])];
         const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
         
+        if (!MOCK_DATA.exercise) MOCK_DATA.exercise = [];
         MOCK_DATA.exercise.push({
             id: newId,
             title: title,
@@ -532,12 +567,8 @@ window.addExerciseTask = function() {
             completed: false
         });
         
-        const taskListElement = document.getElementById('exercise-tasks');
-        if (taskListElement && typeof taskListElement.render === 'function') {
-            taskListElement.render();
-        }
-        window.updateSummary();
-        window.saveData(); // Save changes
+        window.renderAll();
+        window.saveData();
 
         titleInput.value = '';
         weightInput.value = '';
