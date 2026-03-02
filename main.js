@@ -1,6 +1,7 @@
-// Initialize Data from LocalStorage or use defaults
-const LOCAL_STORAGE_KEY = 'callisto_health_data';
-const defaultData = {
+// Initialize Data structure
+const API_URL = 'http://localhost:3000/api/data';
+
+let MOCK_DATA = {
     weight: null,
     breakfast: [],
     lunch: [],
@@ -8,11 +9,38 @@ const defaultData = {
     exercise: []
 };
 
-let MOCK_DATA = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || defaultData;
+// Function to fetch data from local JSON file API
+async function loadData() {
+    try {
+        const response = await fetch(API_URL);
+        if (response.ok) {
+            MOCK_DATA = await response.json();
+            // Re-render UI components after data is loaded
+            window.updateSummary();
+            ['breakfast', 'lunch', 'dinner', 'exercise'].forEach(listType => {
+                const el = document.getElementById(\`\${listType}-tasks\`);
+                if (el && typeof el.render === 'function') el.render();
+            });
+            window.renderWeight();
+        }
+    } catch (error) {
+        console.error('Failed to load data from local server:', error);
+    }
+}
 
-// Function to save data back to LocalStorage
-window.saveData = function() {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(MOCK_DATA));
+// Function to save data to local JSON file API
+window.saveData = async function() {
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(MOCK_DATA),
+        });
+    } catch (error) {
+        console.error('Failed to save data to local server:', error);
+    }
 };
 
 window.updateSummary = function() {
@@ -551,6 +579,9 @@ window.addExerciseTask = function() {
 // Initial Setup
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Fetch data from local server
+    loadData();
+
     // Set Current Date
     const dateElement = document.getElementById('current-date');
     if (dateElement) {
