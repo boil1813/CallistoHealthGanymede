@@ -10,11 +10,7 @@ const MOCK_DATA = {
     breakfast: [],
     lunch: [],
     dinner: [],
-    exercise: [
-        { id: 5, title: '유산소: 가볍게 런닝', detail: '30분 / 250 kcal 소모', completed: true },
-        { id: 6, title: '근력: 스쿼트 & 런지', detail: '4세트', completed: false },
-        { id: 7, title: '스트레칭: 요가 마무리', detail: '15분', completed: false }
-    ]
+    exercise: []
 };
 
 // Global function to handle deleting tasks so it can be called from inline onclick handlers
@@ -40,106 +36,22 @@ class SummaryWidget extends HTMLElement {
     }
 
     render() {
-        const { caloriesConsumed, caloriesTarget, caloriesBurned, currentWeight, targetWeight } = MOCK_DATA.summary;
-        const progressPercent = Math.min((caloriesConsumed / caloriesTarget) * 100, 100);
-
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
-                    display: block;
-                    background-color: var(--color-bg-card, #fff);
-                    border-radius: var(--radius-md, 16px);
-                    padding: var(--space-lg, 24px);
-                    box-shadow: var(--shadow-soft);
-                }
-                .summary-header {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: var(--space-md);
-                }
-                .summary-item {
-                    display: flex;
-                    flex-direction: column;
-                }
-                .label {
-                    font-size: 0.85rem;
-                    color: var(--color-text-muted);
-                    font-weight: 600;
-                    margin-bottom: 4px;
-                }
-                .value {
-                    font-size: 2rem;
-                    font-weight: 800;
-                    color: var(--color-text-main);
-                    line-height: 1;
-                }
-                .value.highlight {
-                    color: var(--color-primary);
-                }
-                .progress-container {
-                    margin-top: var(--space-lg);
-                }
-                .progress-header {
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 0.85rem;
-                    color: var(--color-text-muted);
-                    margin-bottom: 8px;
-                    font-weight: 600;
-                }
-                .progress-bar {
-                    width: 100%;
-                    height: 12px;
-                    background-color: var(--color-bg-main);
-                    border-radius: var(--radius-pill);
-                    overflow: hidden;
-                }
-                .progress-fill {
-                    height: 100%;
-                    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-                    border-radius: var(--radius-pill);
-                    width: ${progressPercent}%;
-                    transition: width 0.5s ease-out;
-                }
-                .stats-footer {
-                    display: flex;
-                    margin-top: var(--space-md);
-                    gap: var(--space-md);
-                    font-size: 0.9rem;
-                    color: var(--color-text-muted);
-                }
-                .stats-footer span {
                     display: flex;
                     align-items: center;
-                    gap: 4px;
+                    justify-content: center;
+                    background-color: var(--color-bg-card, #fff);
+                    border-radius: var(--radius-md, 16px);
+                    padding: var(--space-xl, 32px);
+                    box-shadow: var(--shadow-soft);
+                    color: var(--color-text-muted);
+                    font-weight: 500;
+                    border: 2px dashed rgba(0,0,0,0.05);
                 }
-                .icon-burned { color: var(--color-secondary); }
             </style>
-            
-            <div class="summary-header">
-                <div class="summary-item">
-                    <span class="label">섭취 칼로리</span>
-                    <span class="value highlight">${caloriesConsumed} <span style="font-size:1rem; color:var(--color-text-muted)">kcal</span></span>
-                </div>
-                <div class="summary-item" style="text-align: right;">
-                    <span class="label">목표 체중</span>
-                    <span class="value">${currentWeight} <span style="font-size:1rem; color:var(--color-text-muted)">kg</span></span>
-                </div>
-            </div>
-
-            <div class="progress-container">
-                <div class="progress-header">
-                    <span>일일 권장량: ${caloriesTarget} kcal</span>
-                    <span>${Math.round(progressPercent)}%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
-            </div>
-
-            <div class="stats-footer">
-                <span><b class="icon-burned">🔥</b> ${caloriesBurned} kcal 소모함</span>
-            </div>
+            <div>종합 대시보드 (업데이트 예정)</div>
         `;
     }
 }
@@ -317,6 +229,48 @@ window.addNewTask = function(mealType) {
     }
 };
 
+window.addExerciseTask = function() {
+    const titleInput = document.getElementById('new-exercise-title');
+    const weightInput = document.getElementById('new-exercise-weight');
+    const repsInput = document.getElementById('new-exercise-reps');
+    const setsInput = document.getElementById('new-exercise-sets');
+
+    const title = titleInput.value.trim();
+    const weight = weightInput.value.trim();
+    const reps = repsInput.value.trim();
+    const sets = setsInput.value.trim();
+
+    if (title) {
+        let detailStr = [];
+        if (weight) detailStr.push(`${weight}kg`);
+        if (reps) detailStr.push(`${reps}회`);
+        if (sets) detailStr.push(`${sets}세트`);
+        
+        const detail = detailStr.join(' x ');
+
+        const allTasks = [...MOCK_DATA.breakfast, ...MOCK_DATA.lunch, ...MOCK_DATA.dinner, ...MOCK_DATA.exercise];
+        const newId = allTasks.length > 0 ? Math.max(...allTasks.map(t => t.id)) + 1 : 1;
+        
+        MOCK_DATA.exercise.push({
+            id: newId,
+            title: title,
+            detail: detail,
+            completed: false
+        });
+        
+        const taskListElement = document.getElementById('exercise-tasks');
+        if (taskListElement && typeof taskListElement.render === 'function') {
+            taskListElement.render();
+        }
+
+        titleInput.value = '';
+        weightInput.value = '';
+        repsInput.value = '';
+        setsInput.value = '';
+        titleInput.focus();
+    }
+};
+
 // ==========================================================================
 // Initial Setup
 // ==========================================================================
@@ -334,8 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
     inputs.forEach(input => {
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                const mealType = input.id.replace('new-', '').replace('-title', '');
-                window.addNewTask(mealType);
+                if (input.id.startsWith('new-exercise')) {
+                    window.addExerciseTask();
+                } else {
+                    const mealType = input.id.replace('new-', '').replace('-title', '');
+                    window.addNewTask(mealType);
+                }
             }
         });
     });

@@ -126,10 +126,20 @@
                         <div class="section-header">
                             <div>
                                 <h3>오늘의 운동 🏃</h3>
-                                <p class="section-subtitle">목표 소모량: 400kcal</p>
                             </div>
-                            <span class="status-badge warning">필수 완료</span>
+                            <span class="status-badge warning">오늘의 기록</span>
                         </div>
+                        
+                        <div class="add-exercise-form">
+                            <input type="text" id="new-exercise-title" class="task-input" placeholder="운동명 (예: 벤치프레스)">
+                            <div class="exercise-details-inputs">
+                                <input type="number" id="new-exercise-weight" class="task-input small" placeholder="무게(kg)">
+                                <input type="number" id="new-exercise-reps" class="task-input small" placeholder="횟수">
+                                <input type="number" id="new-exercise-sets" class="task-input small" placeholder="세트">
+                                <button onclick="window.addExerciseTask()" class="icon-button add-btn"><span class="material-icons-round">add</span></button>
+                            </div>
+                        </div>
+
                         <!-- Task List Web Component for Exercise -->
                         <task-list id="exercise-tasks"></task-list>
                     </section>
