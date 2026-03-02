@@ -90,12 +90,15 @@ class SummaryWidget extends HTMLElement {
                     border-radius: var(--radius-md, 16px);
                     padding: var(--space-xl, 32px);
                     box-shadow: var(--shadow-soft);
+                    border: 2px solid red; /* DEBUG: Host boundary */
                 }
                 .section-header {
                     display: flex;
                     justify-content: space-between;
-                    align-items: flex-start;
+                    align-items: center; /* Changed from flex-start to align items vertically */
                     margin-bottom: var(--space-lg);
+                    border: 2px solid blue; /* DEBUG: Header boundary */
+                    padding: 8px; /* Added some padding to see the boundary clearly */
                 }
                 .section-header h3 {
                     font-size: 1.25rem;
@@ -110,11 +113,14 @@ class SummaryWidget extends HTMLElement {
                     background-color: var(--color-bg-main);
                     padding: 24px;
                     border-radius: var(--radius-md);
+                    border: 2px solid green; /* DEBUG: Container boundary */
                 }
                 .summary-item {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
+                    border: 2px dashed purple; /* DEBUG: Item boundary */
+                    padding: 8px; /* added to separate content from border */
                 }
                 .label {
                     font-size: 0.9rem;
