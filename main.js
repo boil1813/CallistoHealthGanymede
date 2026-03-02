@@ -25,7 +25,25 @@ let MOCK_DATA = {
     lunch: [],
     dinner: [],
     postWorkout: [], // Added post-workout
-    exercise: []
+    exercise: [],
+    exerciseDictionary: {
+        upper: [
+            { id: 'u1', name: '벤치프레스', target: '가슴' },
+            { id: 'u2', name: '바벨 로우', target: '등' },
+            { id: 'u3', name: '풀업 (턱걸이)', target: '등' },
+            { id: 'u4', name: '덤벨 숄더 프레스', target: '어깨' },
+            { id: 'u5', name: '사이드 레터럴 레이즈', target: '어깨' },
+            { id: 'u6', name: '푸시업 (팔굽혀펴기)', target: '가슴/팔' }
+        ],
+        lower: [
+            { id: 'l1', name: '스쿼트', target: '전체' },
+            { id: 'l2', name: '레그 프레스', target: '허벅지 앞' },
+            { id: 'l3', name: '런지', target: '엉덩이/허벅지' },
+            { id: 'l4', name: '데드리프트', target: '하체 뒷면' },
+            { id: 'l5', name: '레그 익스텐션', target: '허벅지 앞' },
+            { id: 'l6', name: '카프 레이즈', target: '종아리' }
+        ]
+    }
 };
 
 // Function to save data to Firebase Firestore
@@ -38,6 +56,24 @@ window.saveData = async function() {
     }
 };
 
+// Function to populate the exercise dropdown based on the selected type
+function populateExerciseDropdown(type) {
+    const selectEl = document.getElementById('new-strength-title');
+    if (!selectEl) return;
+    
+    // Clear existing options except the first placeholder
+    selectEl.innerHTML = `<option value="" disabled selected>운동을 선택하세요 (${type === 'upper' ? '상체' : '하체'})</option>`;
+    
+    if (MOCK_DATA.exerciseDictionary && MOCK_DATA.exerciseDictionary[type]) {
+        MOCK_DATA.exerciseDictionary[type].forEach(ex => {
+            const option = document.createElement('option');
+            option.value = ex.name;
+            option.textContent = ex.name;
+            selectEl.appendChild(option);
+        });
+    }
+}
+
 // Function to render all UI components based on current MOCK_DATA
 window.renderAll = function() {
     window.updateSummary();
@@ -45,6 +81,12 @@ window.renderAll = function() {
         const el = document.getElementById(`${listType}-tasks`);
         if (el && typeof el.render === 'function') el.render();
     });
+    
+    // Populate dropdown based on currently selected radio
+    const typeSelector = document.querySelector('input[name="exercise-type"]:checked');
+    if (typeSelector && typeSelector.value.startsWith('strength-')) {
+        populateExerciseDropdown(typeSelector.value.split('-')[1]);
+    }
 };
 
 // Helper to get today's date string
@@ -748,6 +790,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 strengthInputs.style.display = 'flex';
                 cardioInputs.style.display = 'none';
+                const subtype = e.target.value.split('-')[1]; // upper or lower
+                populateExerciseDropdown(subtype);
             }
         });
     });

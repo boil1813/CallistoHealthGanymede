@@ -152,7 +152,10 @@
                             
                             <!-- Strength Inputs (Upper/Lower) -->
                             <div id="strength-inputs" class="exercise-input-group">
-                                <input type="text" id="new-strength-title" class="task-input" placeholder="운동명 (예: 벤치프레스)">
+                                <select id="new-strength-title" class="task-input">
+                                    <option value="" disabled selected>운동을 선택하세요 (상체)</option>
+                                    <!-- Populated dynamically from Firebase -->
+                                </select>
                                 <div class="exercise-details-inputs">
                                     <input type="number" id="new-strength-weight" class="task-input small" placeholder="무게(kg)">
                                     <input type="number" id="new-strength-reps" class="task-input small" placeholder="횟수">
